@@ -6,15 +6,23 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 17:47:31 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/12 20:46:23 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/13 11:23:59 by narchiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef FT_LS
-# define FT_LS
+
+#ifndef FT_LS_H
+# define FT_LS_H
 # define ARR_SIZE 10
 # define A 1.5
 
-#include "libft.h"
+# include "libft.h"
+
+typedef	struct	s_ft_merge_info_ft_ls
+{
+	size_t		*to_sort;
+	size_t		*buf;
+	int			(*cmp)(void *data1, void *data2);
+}				t_ft_merge_info_ft_ls;
 
 typedef	struct	s_flags
 {
