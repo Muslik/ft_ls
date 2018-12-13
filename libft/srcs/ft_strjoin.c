@@ -38,4 +38,4 @@ char	*ft_strjoin(char const *s1, char const *s2, int free_opt)
 		free((char *)s2);
 	}
 	return (newstr);
-
+}

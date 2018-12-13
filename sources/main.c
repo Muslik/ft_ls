@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/10 19:53:18 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/12 22:34:08 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/13 09:10:41 by narchiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,10 @@ void	ft_open_dirs(char *str)
 	struct dirent *pDirent;
 
 	if(!(dir = opendir(str)))
+	{
+		free(str);
 		return ;
+	}
 	vector = ft_vector_create(sizeof(size_t *));
 	while ((pDirent = readdir(dir)) != NULL) {
 		if (ft_strcmp(pDirent->d_name, ".") == 0)
@@ -65,6 +68,7 @@ void	ft_open_dirs(char *str)
 		a = (size_t)pDirent->d_name;
 		ft_vector_push_back((void **)&vector, &a);
 	}
+	closedir(dir);
 	ft_rec_dirs(ft_vector_get_len(vector), &vector, str);
 }
 
