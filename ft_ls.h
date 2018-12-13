@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 17:47:31 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/13 11:23:59 by narchiba         ###   ########.fr       */
+/*   Updated: 2018/12/13 12:04:30 by narchiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef	struct	s_ft_merge_info_ft_ls
 typedef	struct	s_flags
 {
 	char		l;
-	char		R;
+	char		rl;
 	char		a;
 	char		r;
 	char		t;
