@@ -6,7 +6,7 @@
 #    By: dmorgil  <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/03 16:20:46 by dmorgil           #+#    #+#              #
-#    Updated: 2018/12/03 18:49:33 by dmorgil          ###   ########.fr        #
+#    Updated: 2018/12/17 15:13:47 by dmorgil          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME=libft.a
@@ -30,27 +30,41 @@ RAW_SRC=ft_memchr.c ft_memccpy.c ft_memmove.c ft_memcpy.c \
 RAW_OBJS=$(RAW_SRC:.c=.o)
 SRCS=$(addprefix $(SRC_DIR)/,$(RAW_SRC))
 OBJS=$(addprefix $(OBJ_DIR)/,$(RAW_OBJS))
+OBJS_CLEAN = $(strip $(foreach f,$(OBJS),$(wildcard $(f))))
+NAME_CLEAN = $(strip $(foreach f,$(NAME),$(wildcard $(f))))
 INCLUDES= -I includes
 FLAGS=-Wall -Wextra -Werror
 
 .PHONY: all clean fclean re
 
+RED			=	\033[0;31m
+GREEN		=	\033[0;32m
+NC			=	\033[0m
+
 all: $(OBJ_DIR) $(NAME)
 
 $(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR)
 
 $(NAME): $(OBJS)
-	ar rc $(NAME) $(OBJS)
-	ranlib $(NAME)
+	@ar rc $(NAME) $(OBJS)
+	@ranlib $(NAME)
 
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
-	$(CC) $(FLAGS) $(INCLUDES) -o $@ -c $<
+	@$(CC) $(FLAGS) $(INCLUDES) -o $@ -c $<
 
 clean:
-	rm -rf $(OBJS)
+ifneq ($(OBJS_CLEAN),)
+	@rm -rf $(OBJS)
+	@echo "\033[31mLibft Objects files \033[1;31m$(OBJS_LIST)\033[1;0m\033[31m removed.\033[0m"
+else
+endif
 
 fclean: clean
-	rm -rf $(NAME)
+ifneq ($(NAME_CLEAN),)
+	@rm -rf $(NAME)
+	@echo "\033[31mBin \033[1;31m$(NAME)\033[1;0m\033[31m removed.\033[0m"
+else
+endif
 
 re: fclean all

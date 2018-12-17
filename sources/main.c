@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/10 19:53:18 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/13 12:43:19 by narchiba         ###   ########.fr       */
+/*   Updated: 2018/12/16 22:44:10 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "ft_ls.h"
-#include "libft/includes/libft.h"
+#include "libft.h"
+#include <errno.h>
 
 
 void	ft_open_dirs(char *str, t_flags *flags);
@@ -77,13 +78,25 @@ void	ft_open_dirs(char *str, t_flags *flags)
 	closedir(dir);
 }
 
+
 int main(int argc, char *argv[])
 {
 	t_flags flags;
 	char *str_tmp;
 
-	str_tmp = ft_strdup(argv[argc - 1]);
 	ft_init_flags(&flags);
+	if (argc == 1)
+		str_tmp = ft_strdup(".");
+	else
+	{
+		str_tmp = ft_strdup(argv[argc - 1]);
+		ft_get_flags(&flags, argc, argv);
+	}
+	printf("R: %d\n", flags.R);
+	printf("l: %d\n", flags.l);
+	printf("a: %d\n", flags.a);
+	printf("r: %d\n", flags.r);
+	printf("t: %d\n", flags.t);
 	ft_open_dirs(str_tmp, &flags);
 
 	return (0);
