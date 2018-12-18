@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     rights[8] = (lbuf->st_mode & S_IWOTH) ? 'w' : '-';
     rights[9] = (lbuf->st_mode & S_IXOTH) ? 'x' : '-';
 	if (lbuf->st_mode & S_ISVTX)
-		rights[9] = ('x' == rights[9] ? 's' : 'S');
+		rights[9] = ('x' == rights[9] ? 't' : 'T');
 	// ACL AND EXTENDED ATTRIBUTES
 	char str[10];
 	acl_entry_t dummy;
@@ -77,7 +77,13 @@ int main(int argc, char *argv[])
 	fflush(stdout);
 	printf("%s  ", grp->gr_name);
 	fflush(stdout);
-	printf("%zd ", lbuf->st_size);
+	if (rights[0] != 'b' && rights[0] != 'c')
+		printf("%zd ", lbuf->st_size);
+	else
+	{
+		printf(" %zd,   ", major(lbuf->st_rdev));
+		printf("%zd ", minor(lbuf->st_rdev));
+	}
 	fflush(stdout);
 	char *file_time = ctime(&lbuf->st_mtime);
 	write(1, file_time + 4, 12);
@@ -93,6 +99,6 @@ int main(int argc, char *argv[])
 		printf("%s", argv[argc-1]);
 		fflush(stdout);
 	}
-
+	printf("\n%d\n", lbuf->st_mode & S_IFMT);
 	return 0;
 }
