@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:31:17 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/18 21:20:58 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/18 21:45:41 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	print_files(size_t *vector, size_t len, int *flags)
 {
+	// CHOOSE OPTION OF PRINT
 	size_t	i;
 	t_file_info *tmp;
 
@@ -36,7 +37,7 @@ void	ft_rec_dirs(size_t len, size_t **vector, char *str, int *flags)
 
 	i = -1;
 	ft_vector_to_array((void **)vector);
-
+	//Choose sort и отсортить
 	print_files(*vector, len, flags);
 	while (++i < len)
 	{
