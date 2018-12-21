@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 17:47:31 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/18 19:40:28 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/19 15:25:13 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@
 # define LS_ONE 128
 # define LS_SS	256
 # define LS_S	512
+
+enum { USAGE_ERR, ERROR, MALLOC_ERR };
 
 typedef	struct	s_ft_merge_info_ft_ls
 {

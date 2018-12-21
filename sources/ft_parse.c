@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/14 13:39:24 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/18 19:31:25 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/19 11:12:33 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,22 @@ static int ft_strchr_by_index(char *str, int c)
 
 void	ft_handle_errors(char *str, int err)
 {
-	err = 0;
-	printf("ERROR:\n");
-	ft_putstr_fd("./ft_ls: illegal option -- ", 2);
-	ft_putchar_fd(*str, 2);
-	ft_putstr_fd("\nusage: ls [-aflRrtG1Ss] [file ...]", 2);
+	if (err == USAGE_ERR)
+	{
+		ft_putstr_fd("./ft_ls: illegal option -- ", 2);
+		ft_putchar_fd(*str, 2);
+		ft_putstr_fd("\nusage: ./ft_ls [-aflRrtG1Ss] [file ...]", 2);
+	}
+	else if (err == MALLOC_ERR || err == ERROR)
+		ft_putstr_fd("./ft_ls: ", 2);
+	if (err == ERROR)
+	{
+		ft_putstr_fd(str, 2);
+		ft_putstr_fd(": ", 2);
+		ft_putendl_fd(strerror(errno), 2);
+	}
+	if (err == USAGE_ERR || err == MALLOC_ERR)
+		exit(EXIT_FAILURE);
 }
 
 static int	ft_add_flags(int *flags, char *str)
@@ -42,7 +53,7 @@ static int	ft_add_flags(int *flags, char *str)
 	while (*(++str))
 	{
 		if ((bit = ft_strchr_by_index("aflRrtG1Ss", *str)) == -1)
-			ft_handle_errors(str, 0);
+			ft_handle_errors(str, USAGE_ERR);
 		*flags |= (1 << bit);
 		if ((*str == 'l') || (*str == '1'))
 			*flags &= (*str == 'l') ? ~LS_ONE : ~LS_L;

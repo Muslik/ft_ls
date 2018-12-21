@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:31:17 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/18 21:45:41 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/19 15:36:50 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +54,13 @@ void	ft_rec_dirs(size_t len, size_t **vector, char *str, int *flags)
 }
 
 static	t_file_info *ft_add_file(//char path[PATH_MAX],
-		char *name)
+		char *name, struct stat *stat)
 {
-struct stat *stat;
 	t_file_info *file;
 
-if (!(stat = (struct stat *)malloc(sizeof(struct stat))))
-		exit(0);
-	lstat(name, stat);
 	if (!(file = (t_file_info *)malloc(sizeof(t_file_info)))
 			|| (!(file->name = ft_strdup(name))))
-		exit(0);
+		ft_handle_errors(name, MALLOC_ERR);
 	file->mode = stat->st_mode;
 	file->st_nlink = stat->st_nlink;
 	file->st_uid = stat->st_uid;
@@ -83,26 +79,32 @@ if (!(stat = (struct stat *)malloc(sizeof(struct stat))))
 void	ft_open_dirs(char *str, int *flags)
 {
 	DIR				*dir;
-	/* char			*err; */
 	size_t			*vector;
 	struct dirent	*pDirent;
+	struct stat		*stat;
 	t_file_info		*tmp;
 
-	if(!(dir = opendir(str)))
+	if (!(stat = (struct stat *)malloc(sizeof(struct stat))))
+		ft_handle_errors(str, MALLOC_ERR);
+	lstat(str, stat);
+	if (S_ISDIR(stat->st_mode))
 	{
-		/* ERROR HANDLE */
-		/* perror(str); */
-		return ;
+		if(!(dir = opendir(str)))
+		{
+			ft_handle_errors(str, ERROR);
+			return ;
+		}
+		vector = ft_vector_create(sizeof(size_t *));
+		while ((pDirent = readdir(dir)) != NULL)
+		{
+			if (pDirent->d_name[0] != '.' || (*flags & LS_A))
+			{
+				tmp = ft_add_file(pDirent->d_name, stat);
+				ft_vector_push_back((void **)&vector, &tmp);
+			}
+			/* ERROR HANDLE */
+		}
+		ft_rec_dirs(ft_vector_get_len(vector), &vector, str, flags);
+		closedir(dir);
 	}
-	vector = ft_vector_create(sizeof(size_t *));
-	int i = 3;
-	while ((pDirent = readdir(dir)) != NULL)
-	{
-		tmp = ft_add_file(pDirent->d_name);
-		ft_vector_push_back((void **)&vector, &tmp);
-		tmp = (t_file_info *)(*(vector + i++));
-		/* ERROR HANDLE */
-	}
-	ft_rec_dirs(ft_vector_get_len(vector), &vector, str, flags);
-	closedir(dir);
 }

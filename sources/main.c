@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/10 19:53:18 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/18 21:17:05 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/19 11:36:34 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int main(int argc, char **argv)
 	i = ft_get_flags(argc, argv, &flags);
 	/* argc -= i; */
 	/* argv += i; */
-	fflush(stdout);
 	while (i < argc)
 	{
 		char *s = ft_strdup(argv[i++]);

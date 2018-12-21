@@ -6,7 +6,7 @@
 #    By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/10 17:38:22 by dmorgil           #+#    #+#              #
-#    Updated: 2018/12/18 20:14:57 by dmorgil          ###   ########.fr        #
+#    Updated: 2018/12/19 15:27:15 by dmorgil          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,6 +61,7 @@ endif
 fclean: clean
 ifneq ($(NAME_CLEAN),)
 	@make fclean -C libft
+	@rm -rf $(OBJ_DIR)
 	@rm -rf $(NAME)
 	@echo "\033[31mBin \033[1;31m$(NAME)\033[1;0m\033[31m removed.\033[0m"
 else
