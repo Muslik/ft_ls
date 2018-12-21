@@ -6,49 +6,34 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/10 19:53:18 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/19 11:36:34 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/21 10:37:10 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /* usage: ls [-] [file ...] */
 #include "ft_ls.h"
 
-/* int main(int argc, char *argv[]) */
-/* { */
-/* 	t_flags flags; */
-/* 	char *str_tmp; */
+void	find_term_col_ammount(void)
+{
+	struct winsize	w;
 
-/* 	ft_init_flags(&flags); */
-/* 	if (argc == 1) */
-/* 		str_tmp = ft_strdup("."); */
-/* 	else */
-/* 	{ */
-/* 		str_tmp = ft_strdup(argv[argc - 1]); */
-/* 		ft_get_flags(&flags, argc, argv); */
-/* 	} */
-/* 	printf("R: %d\n", flags.R); */
-/* 	printf("l: %d\n", flags.l); */
-/* 	printf("a: %d\n", flags.a); */
-/* 	printf("r: %d\n", flags.r); */
-/* 	printf("t: %d\n", flags.t); */
-/* 	ft_open_dirs(str_tmp, &flags); */
-
-/* 	return (0); */
-/* } */
+	ioctl(0, TIOCGWINSZ, &w);
+	g_term_col = w.ws_col;
+}
 
 int main(int argc, char **argv)
 {
 	int i;
-	int flags;
 
 	flags = 0;
-	i = ft_get_flags(argc, argv, &flags);
+	i = ft_get_flags(argc, argv);
+	find_term_col_ammount();
 	/* argc -= i; */
 	/* argv += i; */
 	while (i < argc)
 	{
 		char *s = ft_strdup(argv[i++]);
-		ft_open_dirs(s, &flags);
+		ft_open_dirs(s);
 	}
 	return (0);
 }

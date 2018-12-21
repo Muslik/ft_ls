@@ -6,30 +6,19 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:31:17 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/19 15:36:50 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/21 10:53:42 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	print_files(size_t *vector, size_t len, int *flags)
+void	ft_print_files(size_t *vector, t_dir_info *dir_info)
 {
 	// CHOOSE OPTION OF PRINT
-	size_t	i;
-	t_file_info *tmp;
-
-	(void)flags;
-	/* (void)vector; */
-	/* (void)tmp; */
-	i = -1;
-	while (++i < len)
-	{
-		tmp = (t_file_info *)vector[i];
-		printf("%s\n", tmp->name);
-	}
+	ft_print_in_terminal(vector, dir_info);
 }
 
-void	ft_rec_dirs(size_t len, size_t **vector, char *str, int *flags)
+void	ft_rec_dirs(t_dir_info *dir_info, size_t **vector, char *str)
 {
 	size_t i;
 	char *str_tmp;
@@ -38,15 +27,15 @@ void	ft_rec_dirs(size_t len, size_t **vector, char *str, int *flags)
 	i = -1;
 	ft_vector_to_array((void **)vector);
 	//Choose sort и отсортить
-	print_files(*vector, len, flags);
-	while (++i < len)
+	ft_print_files(*vector, dir_info);
+	while (++i < dir_info->files_ammount)
 	{
 		tmp = (t_file_info *)(*vector)[i];
 		if (ft_strncmp(".", tmp->name, 1))
 		{
 			str_tmp = ft_strjoin(str, "/", 0);
 			str_tmp = ft_strjoin(str_tmp, tmp->name, 1);
-			ft_open_dirs(str_tmp, flags);
+			ft_open_dirs(str_tmp);
 		}
 	}
 	free(str);
@@ -54,10 +43,14 @@ void	ft_rec_dirs(size_t len, size_t **vector, char *str, int *flags)
 }
 
 static	t_file_info *ft_add_file(//char path[PATH_MAX],
-		char *name, struct stat *stat)
+		char *name)
 {
 	t_file_info *file;
+	struct stat		*stat;
 
+	if (!(stat = (struct stat *)malloc(sizeof(struct stat))))
+		ft_handle_errors(name, MALLOC_ERR);
+	lstat(name, stat);
 	if (!(file = (t_file_info *)malloc(sizeof(t_file_info)))
 			|| (!(file->name = ft_strdup(name))))
 		ft_handle_errors(name, MALLOC_ERR);
@@ -76,35 +69,32 @@ static	t_file_info *ft_add_file(//char path[PATH_MAX],
 	return (file);
 }
 
-void	ft_open_dirs(char *str, int *flags)
+void	ft_open_dirs(char *str)
 {
 	DIR				*dir;
 	size_t			*vector;
 	struct dirent	*pDirent;
-	struct stat		*stat;
 	t_file_info		*tmp;
+	t_dir_info		dir_info;
 
-	if (!(stat = (struct stat *)malloc(sizeof(struct stat))))
-		ft_handle_errors(str, MALLOC_ERR);
-	lstat(str, stat);
-	if (S_ISDIR(stat->st_mode))
+	dir_info.file_max_len = 0;
+	if(!(dir = opendir(str)))
 	{
-		if(!(dir = opendir(str)))
-		{
-			ft_handle_errors(str, ERROR);
-			return ;
-		}
-		vector = ft_vector_create(sizeof(size_t *));
-		while ((pDirent = readdir(dir)) != NULL)
-		{
-			if (pDirent->d_name[0] != '.' || (*flags & LS_A))
-			{
-				tmp = ft_add_file(pDirent->d_name, stat);
-				ft_vector_push_back((void **)&vector, &tmp);
-			}
-			/* ERROR HANDLE */
-		}
-		ft_rec_dirs(ft_vector_get_len(vector), &vector, str, flags);
-		closedir(dir);
+		ft_handle_errors(str, ERROR);
+		return ;
 	}
+	vector = ft_vector_create(sizeof(size_t *));
+	while ((pDirent = readdir(dir)) != NULL)
+	{
+		if (pDirent->d_name[0] != '.' || (flags & LS_A))
+		{
+			tmp = ft_add_file(pDirent->d_name);
+			ft_vector_push_back((void **)&vector, &tmp);
+			dir_info.file_max_len = dir_info.file_max_len < tmp->file_len ?
+				tmp->file_len : dir_info.file_max_len;
+		}
+	}
+	dir_info.files_ammount = ft_vector_get_len(vector);
+	ft_rec_dirs(&dir_info, &vector, str);
+	closedir(dir);
 }

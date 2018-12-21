@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/14 13:39:24 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/19 11:12:33 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/21 10:40:31 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	ft_handle_errors(char *str, int err)
 		exit(EXIT_FAILURE);
 }
 
-static int	ft_add_flags(int *flags, char *str)
+static int	ft_add_flags(char *str)
 {
 	int bit;
 
@@ -54,21 +54,21 @@ static int	ft_add_flags(int *flags, char *str)
 	{
 		if ((bit = ft_strchr_by_index("aflRrtG1Ss", *str)) == -1)
 			ft_handle_errors(str, USAGE_ERR);
-		*flags |= (1 << bit);
+		flags |= (1 << bit);
 		if ((*str == 'l') || (*str == '1'))
-			*flags &= (*str == 'l') ? ~LS_ONE : ~LS_L;
+			flags &= (*str == 'l') ? ~LS_ONE : ~LS_L;
 	}
 	return (1);
 }
 
-int		ft_get_flags(int argc, char **argv, int *flags)
+int		ft_get_flags(int argc, char **argv)
 {
 	int i;
 
 	i = 1;
 	while (i < argc && argv[i][0] == '-' && argv[i][1] != '\0')
 	{
-		if(!ft_add_flags(flags, argv[i]))
+		if(!ft_add_flags(argv[i]))
 			return (-1);
 		i++;
 	}

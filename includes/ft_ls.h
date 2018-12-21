@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 17:47:31 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/19 15:25:13 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/21 10:51:10 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 # include "libft.h"
 
+#include <sys/ioctl.h>
 #include <limits.h>
 #include <errno.h>
 #include <stdio.h>
@@ -46,6 +47,8 @@
 
 enum { USAGE_ERR, ERROR, MALLOC_ERR };
 
+int flags;
+
 typedef	struct	s_ft_merge_info_ft_ls
 {
 	size_t		*to_sort;
@@ -65,6 +68,18 @@ typedef	struct	s_ft_merge_info_ft_ls
 ** long         - time and long ntime
 ** char *name   - file name
 */
+
+/*
+ * Колонки
+*/
+size_t			g_term_col;
+
+typedef	struct	s_dir_info
+{
+	size_t	file_max_len;
+	size_t	term_rows;
+	size_t	files_ammount;
+}				t_dir_info;
 
 typedef struct	s_file_info
 {
@@ -97,19 +112,19 @@ void	*ft_vector_get_last_elem(void *ft_vector);
 void	*ft_vector_get_first_elem(void *ft_vector);
 size_t	ft_vector_get_len(void *ft_vector);
 
-void	ft_open_dirs(char *str, int *flags);
-void	ft_rec_dirs(size_t len, size_t **vector, char *str, int *flags);
+void	ft_open_dirs(char *str);
+void	ft_rec_dirs(t_dir_info *dir_info, size_t **vector, char *str);
 
 /*
  ** FLAGS PARSER
 */
 
-int		ft_get_flags(int argc, char **argv, int *flags);
+int		ft_get_flags(int argc, char **argv);
 void	ft_handle_errors(char *str, int err);
 
 /*
  **
 */
-void	print_files(size_t *vector, size_t len, int *flags);
-void	ft_rec_dirs(size_t len, size_t **vector, char *str, int *flags);
+void	ft_print_files(size_t *vector, t_dir_info *dir_info);
+void	ft_print_in_terminal(size_t *vec_files, t_dir_info *dir_info);
 #endif
