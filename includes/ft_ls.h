@@ -6,12 +6,17 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 17:47:31 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/21 10:51:10 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/21 17:38:21 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_LS_H
 # define FT_LS_H
+
+# ifndef _DARWIN_FEATURE_64_BIT_INODE
+# define _DARWIN_FEATURE_64_BIT_INODE
+# endif
+
 # define ARR_SIZE 10
 # define A 1.5
 
@@ -34,18 +39,17 @@
 #include <pwd.h>
 #include <grp.h>
 
-# define LS_A	1
-# define LS_L	2
-# define LS_RR	4
-# define LS_R	8
-# define LS_T	16
+# define LS_RR	1
+# define LS_SS	2
+# define LS_UU	4
+# define LS_A	8
+# define LS_C	16
 # define LS_F	32
-# define LS_G	64
-# define LS_ONE 128
-# define LS_SS	256
-# define LS_S	512
-
-enum { USAGE_ERR, ERROR, MALLOC_ERR };
+# define LS_L	64
+# define LS_R	128
+# define LS_T	256
+# define LS_U   512
+# define LS_ONE 1024
 
 int flags;
 
@@ -65,7 +69,6 @@ typedef	struct	s_ft_merge_info_ft_ls
 ** off_t        - file size
 ** dev_t        - device type
 ** time_t       - last modification time
-** long         - time and long ntime
 ** char *name   - file name
 */
 
@@ -91,9 +94,9 @@ typedef struct	s_file_info
 	off_t				st_size;
 	dev_t				st_rdev;
 	time_t				ftime;
-	long				ntime;
 	char				*name;
 	char				full_path[PATH_MAX];
+	char				*rel_path;
 	size_t				file_len;
 }				t_file_info;
 
@@ -112,19 +115,21 @@ void	*ft_vector_get_last_elem(void *ft_vector);
 void	*ft_vector_get_first_elem(void *ft_vector);
 size_t	ft_vector_get_len(void *ft_vector);
 
-void	ft_open_dirs(char *str);
-void	ft_rec_dirs(t_dir_info *dir_info, size_t **vector, char *str);
+int		ft_open_dirs(char *path, char *name);
+void	ft_rec_dirs(t_dir_info *dir_info, size_t **vector);
 
 /*
  ** FLAGS PARSER
 */
 
 int		ft_get_flags(int argc, char **argv);
-void	ft_handle_errors(char *str, int err);
+int		ft_usage_error(char c);
+int		ft_errno_error(char *path, char *name);
 
 /*
  **
 */
 void	ft_print_files(size_t *vector, t_dir_info *dir_info);
 void	ft_print_in_terminal(size_t *vec_files, t_dir_info *dir_info);
+int		ft_merge_sort_ft_ls(size_t *to_sort, size_t left, size_t right, int (*cmp)(void *data1, void *data2));
 #endif
