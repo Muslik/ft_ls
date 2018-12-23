@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 10:44:36 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/21 12:58:36 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/21 21:19:41 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,9 @@ void			ft_print_in_terminal(size_t *vec_files, t_dir_info *dir_info)
 	size_t	len;
 
 	len = (dir_info->file_max_len + 1) * dir_info->files_ammount + 1;
-	if (!(buf = malloc(len)))
+	if (!(buf = (char *)malloc(len + 1)))
 		exit(EXIT_FAILURE);
-	ft_memset(buf, '\0', len);
+	ft_memset(buf, '\0', len + 1);
 	dir_info->term_rows = find_row_ammount(dir_info->file_max_len,
 			dir_info->files_ammount);
 	print_files(buf, vec_files, dir_info);

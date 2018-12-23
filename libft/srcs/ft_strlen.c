@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/21 10:46:51 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/11/21 16:33:03 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/21 20:00:41 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 size_t	ft_strlen(const char *str)
 {
-	size_t len;
+	char	*begin;
 
-	len = 0;
-	while (str[len])
-		len++;
-	return (len);
+	begin = (char *)str;
+	while (*str)
+		str++;
+	return ((char *)str - begin);
 }

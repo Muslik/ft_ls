@@ -6,7 +6,7 @@
 #    By: dmorgil  <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/03 16:20:46 by dmorgil           #+#    #+#              #
-#    Updated: 2018/12/17 15:13:47 by dmorgil          ###   ########.fr        #
+#    Updated: 2018/12/21 22:08:40 by dmorgil          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME=libft.a
@@ -33,7 +33,7 @@ OBJS=$(addprefix $(OBJ_DIR)/,$(RAW_OBJS))
 OBJS_CLEAN = $(strip $(foreach f,$(OBJS),$(wildcard $(f))))
 NAME_CLEAN = $(strip $(foreach f,$(NAME),$(wildcard $(f))))
 INCLUDES= -I includes
-FLAGS=-Wall -Wextra -Werror
+FLAGS=-Wall -Wextra -Werror -o3 -ofast
 
 .PHONY: all clean fclean re
 

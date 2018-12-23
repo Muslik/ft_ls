@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:31:17 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/21 18:04:22 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/21 21:30:32 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int		cmp_time(void *data1, void *data2)
 	return (cmp_alpha(data1, data2));
 }
 
-static void	ft_ls_sort(size_t *vector, t_dir_info *dir_info)
+void	ft_ls_sort(size_t *vector, t_dir_info *dir_info)
 {
 	if (flags & LS_F)
 		return ;
@@ -103,14 +103,25 @@ void	ft_rec_dirs(t_dir_info *dir_info, size_t **vector)
 	ft_vector_to_array((void **)vector);
 	if (dir_info->files_ammount > 1)
 		ft_ls_sort(*vector, dir_info);
-	ft_print_files(*vector, dir_info);
+	if (dir_info->files_ammount > 0)
+		ft_print_files(*vector, dir_info);
 	if (flags & LS_RR)
 	{
 		while (++i < dir_info->files_ammount)
 		{
 			tmp = (t_file_info *)(*vector)[i];
+			if (S_ISLNK(tmp->mode))
+				continue;
 			ft_open_dirs(tmp->rel_path, tmp->name);
 		}
+	}
+	i = -1;
+	while (++i < dir_info->files_ammount)
+	{
+		tmp = (t_file_info *)(*vector)[i];
+		free(tmp->name);
+		free(tmp->rel_path);
+		free(tmp);
 	}
 	free(*vector);
 }
@@ -141,6 +152,7 @@ static	t_file_info *ft_add_file(char *path,
 	file->ftime = (flags & LS_C) ? stat->st_ctimespec.tv_sec : file->ftime;
 	file->st_blocks = stat->st_blocks;
 	file->file_len = ft_strlen(file->name);
+	free(stat);
 	realpath(name, file->full_path);
 	return (file);
 }
@@ -157,6 +169,13 @@ int		ft_open_dirs(char *path, char *name)
 	if(!(dir = opendir(path)))
 		return (ft_errno_error(path, name));
 	vector = ft_vector_create(sizeof(size_t *));
+	size_t len = ft_strlen(path);
+	char *buf = malloc(len + 3);
+	ft_memmove(buf, "\n", 1);
+	ft_memmove(buf + 1, path, len);
+	ft_memmove(buf + len + 1, ":\n", 2);
+	write(1, buf, len + 3);
+	free(buf);
 	while ((pDirent = readdir(dir)) != NULL)
 	{
 		if (pDirent->d_name[0] != '.' || (flags & LS_A))
