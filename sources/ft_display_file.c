@@ -6,119 +6,11 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:31:17 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/24 12:25:50 by narchiba         ###   ########.fr       */
+/*   Updated: 2018/12/24 16:20:55 by narchiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-
-void	ft_print_in_pipe(size_t *vector, t_dir_info *dir_info)
-{
-	size_t		i;
-	t_file_info	*tmp;
-	char		*buf;
-	size_t		offset;
-	size_t		buf_len;
-
-	buf_len = (dir_info->file_max_len + 1) * dir_info->files_ammount;
-	if (!(buf = malloc(buf_len)))
-		exit(EXIT_FAILURE);
-	ft_memset(buf, 0, buf_len);
-	i = -1;
-	offset = 0;
-	while (++i < dir_info->files_ammount)
-	{
-		tmp = (t_file_info *)(vector[i]);
-		ft_memmove(buf + offset, tmp->name, tmp->file_len);
-		offset += tmp->file_len;
-		buf[offset++] = '\n';
-	}
-	write(1, buf, offset);
-	free(buf);
-}
-
-void	ft_print_files(size_t *vector, t_dir_info *dir_info)
-{
-	// CHOOSE OPTION OF PRINT
-	/* ft_print_in_pipe(vector, dir_info); */
-	ft_print_in_terminal(vector, dir_info);
-}
-
-int		cmp_alpha(void *data1, void *data2)
-{
-	return (ft_strcmp(((t_file_info *)data1)->name, ((t_file_info *)data2)->name));
-}
-
-int		rev_cmp_alpha(void *data1, void *data2)
-{
-	return (ft_strcmp(((t_file_info *)data2)->name, ((t_file_info *)data1)->name));
-}
-
-int		rev_cmp_size(void *data1, void *data2)
-{
-	int sub;
-
-	sub = (((t_file_info *)data1)->st_size - ((t_file_info *)data2)->st_size);
-	if (sub)
-		return (sub);
-	return (rev_cmp_alpha(data1, data2));
-}
-
-int		cmp_size(void *data1, void *data2)
-{
-	int sub;
-
-	sub = (((t_file_info *)data2)->st_size - ((t_file_info *)data1)->st_size);
-	if (sub)
-		return (sub);
-	return (cmp_alpha(data1, data2));
-}
-
-int		rev_cmp_time(void *data1, void *data2)
-{
-	int sub;
-
-	sub = (((t_file_info *)data1)->ftime - ((t_file_info *)data2)->ftime);
-	if (sub)
-		return (sub);
-	return (rev_cmp_alpha(data1, data2));
-}
-
-int		cmp_time(void *data1, void *data2)
-{
-	int sub;
-
-	sub = (((t_file_info *)data2)->ftime - ((t_file_info *)data1)->ftime);
-	if (sub)
-		return (sub);
-	return (cmp_alpha(data1, data2));
-}
-
-void	ft_ls_sort(size_t *vector, t_dir_info *dir_info)
-{
-	if (flags & LS_F)
-		return ;
-	if (flags & LS_SS)
-	{
-		if (flags & LS_R)
-			ft_merge_sort_ft_ls(vector, 0 , dir_info->files_ammount - 1, &rev_cmp_size);
-		else
-			ft_merge_sort_ft_ls(vector, 0 , dir_info->files_ammount - 1, &cmp_size);
-		return ;
-	}
-	if (flags & LS_T)
-	{
-		if (flags & LS_R)
-			ft_merge_sort_ft_ls(vector, 0 , dir_info->files_ammount - 1, &rev_cmp_time);
-		else
-			ft_merge_sort_ft_ls(vector, 0 , dir_info->files_ammount - 1, &cmp_time);
-		return ;
-	}
-	if (flags & LS_R)
-		ft_merge_sort_ft_ls(vector, 0 , dir_info->files_ammount - 1, &rev_cmp_alpha);
-	else
-		ft_merge_sort_ft_ls(vector, 0 , dir_info->files_ammount - 1, &cmp_alpha);
-}
 
 void	ft_free_vec_of_files(t_dir_info *dir_info, size_t *vector)
 {
@@ -166,61 +58,6 @@ void	ft_rec_dirs(t_dir_info *dir_info, size_t **vector)
 		}
 	}
 	ft_free_vec_of_files(dir_info, *vector);
-}
-
-static	void		fill_file(struct stat *stat, t_file_info *file)
-{
-	if (flags & LS_L)
-	{
-		file->mode = stat->st_mode;
-		file->st_uid = stat->st_uid;
-		file->st_gid = stat->st_gid;
-		file->st_rdev = stat->st_rdev;
-		file->st_blocks = stat->st_blocks;
-		file->ftime = stat->st_mtimespec.tv_sec;
-		file->ftime = (flags & LS_U) ? stat->st_atimespec.tv_sec : file->ftime;
-		file->ftime = (flags & LS_UU) ? stat->st_birthtimespec.tv_sec : file->ftime;
-		file->ftime = (flags & LS_C) ? stat->st_ctimespec.tv_sec : file->ftime;
-	}
-	else if (flags & LS_SS)
-		file->st_size = stat->st_size;
-	else if (flags & (LS_U | LS_UU | LS_C | LS_T))
-	{
-		file->ftime = stat->st_mtimespec.tv_sec;
-		file->ftime = (flags & LS_U) ? stat->st_atimespec.tv_sec : file->ftime;
-		file->ftime = (flags & LS_UU) ? stat->st_birthtimespec.tv_sec : file->ftime;
-		file->ftime = (flags & LS_C) ? stat->st_ctimespec.tv_sec : file->ftime;
-	}
-}
-
-static	t_file_info *ft_add_file(char *path, struct dirent	*pDirent)
-{
-	t_file_info		*file;
-	struct stat		*stat;
-
-	if (!(file = (t_file_info *)malloc(sizeof(t_file_info))))
-		exit(EXIT_FAILURE);
-	ft_memset(file, 0, sizeof(t_file_info));
-	if (!(file->name = ft_strdup(pDirent->d_name)))
-		exit(EXIT_FAILURE);
-	if (path[0] == '/' && path[1] == '\0')
-		file->rel_path = ft_strjoin(path, "", 0);
-	else
-		file->rel_path = ft_strjoin(path, "/", 0);
-	file->rel_path = ft_strjoin(file->rel_path, file->name, 1);
-	file->type = pDirent->d_type;
-	if (flags & (LS_T | LS_UU | LS_U | LS_SS | LS_C | LS_L))
-	{
-		if (!(stat = (struct stat *)malloc(sizeof(struct stat))))
-			exit(EXIT_FAILURE);
-		ft_memset(stat, 0, sizeof(struct stat));
-		lstat(file->rel_path, stat);
-		fill_file(stat, file);
-		free(stat);
-	}
-	file->file_len = ft_strlen(file->name);
-	realpath(file->name, file->full_path);
-	return (file);
 }
 
 void	ft_print_dir(char *path, size_t check)

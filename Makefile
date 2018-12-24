@@ -6,7 +6,7 @@
 #    By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/10 17:38:22 by dmorgil           #+#    #+#              #
-#    Updated: 2018/12/21 22:08:25 by dmorgil          ###   ########.fr        #
+#    Updated: 2018/12/24 16:24:55 by narchiba         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,9 @@ RAW_SRC     =	main.c \
 				ft_vector_free.c ft_ceill.c ft_floorl.c \
 				ft_vector_get_functions.c ft_merge_sort_ft_ls.c\
 				ft_parse.c ft_detailed_list.c ft_display_file.c \
-				ft_print_term.c
+				ft_print_term.c ft_add_file.c ft_ls_sort_part1.c\
+				ft_ls_sort_part2.c ft_print_files.c\
+
 RAW_OBJS=$(RAW_SRC:.c=.o)
 SRCS=$(addprefix $(SRC_DIR)/,$(RAW_SRC))
 OBJS=$(addprefix $(OBJ_DIR)/,$(RAW_OBJS))
