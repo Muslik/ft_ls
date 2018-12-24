@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 17:28:05 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/12 22:14:39 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/24 17:28:32 by narchiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void			ft_bzero(void *s, size_t n);
  ** PART II FUNCTIONS
 */
 
+char			*ft_itoa_base(size_t n, size_t base, int is_signed);
 void			*ft_memalloc(size_t size);
 void			ft_memdel(void **ap);
 char			*ft_strnew(size_t size);

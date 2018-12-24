@@ -6,7 +6,7 @@
 #    By: dmorgil  <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/03 16:20:46 by dmorgil           #+#    #+#              #
-#    Updated: 2018/12/21 22:08:40 by dmorgil          ###   ########.fr        #
+#    Updated: 2018/12/24 17:27:46 by narchiba         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME=libft.a
@@ -26,8 +26,10 @@ RAW_SRC=ft_memchr.c ft_memccpy.c ft_memmove.c ft_memcpy.c \
 	 ft_lstdelone.c ft_lstdel.c ft_lstadd.c ft_lstiter.c ft_lstmap.c \
 	 ft_isblank.c ft_islower.c ft_isspace.c ft_isupper.c ft_isxdigit.c \
 	 ft_isgraph.c ft_strisnumeric.c ft_strislowercase.c ft_strisalpha.c \
-	 ft_iscntrl.c ft_strisprintable.c ft_strlowcase.c ft_strupcase.c
-RAW_ASS=ft_memset.s ft_strlen.s
+	 ft_iscntrl.c ft_strisprintable.c ft_strlowcase.c ft_strupcase.c ft_strlen.c\
+	 ft_itoa_base.c\
+
+RAW_ASS=ft_memset.s
 # RAW_OBJS=$(RAW_SRC:.c=.o)
 RAW_OBJS=ft_memchr.o ft_memccpy.o ft_memmove.o ft_memcpy.o \
 	 ft_memcmp.o ft_strlen.o ft_strdup.o ft_strcpy.o ft_strncpy.o ft_strcat.o \
@@ -42,7 +44,9 @@ RAW_OBJS=ft_memchr.o ft_memccpy.o ft_memmove.o ft_memcpy.o \
 	 ft_lstdelone.o ft_lstdel.o ft_lstadd.o ft_lstiter.o ft_lstmap.o \
 	 ft_isblank.o ft_islower.o ft_isspace.o ft_isupper.o ft_isxdigit.o \
 	 ft_isgraph.o ft_strisnumeric.o ft_strislowercase.o ft_strisalpha.o \
-	 ft_iscntrl.o ft_strisprintable.o ft_strlowcase.o ft_strupcase.o ft_memset.o
+	 ft_iscntrl.o ft_strisprintable.o ft_strlowcase.o ft_strupcase.o ft_memset.o\
+	 ft_itoa_base.o\
+
 SRCS=$(addprefix $(SRC_DIR)/,$(RAW_SRC))
 OBJS=$(addprefix $(OBJ_DIR)/,$(RAW_OBJS))
 OBJS_CLEAN = $(strip $(foreach f,$(OBJS),$(wildcard $(f))))
