@@ -160,7 +160,7 @@ void	ft_rec_dirs(t_dir_info *dir_info, size_t **vector)
 				if (tmp->name[0] == '.' && tmp->name[1] == '.' && tmp->name[2] == '\0')
 					continue;
 			}
-			if (S_ISLNK(tmp->mode))
+			if (tmp->type != DT_DIR)
 				continue;
 			ft_open_dirs(tmp->rel_path, tmp->name, 1);
 		}
@@ -168,8 +168,32 @@ void	ft_rec_dirs(t_dir_info *dir_info, size_t **vector)
 	ft_free_vec_of_files(dir_info, *vector);
 }
 
-static	t_file_info *ft_add_file(char *path,
-		char *name)
+static	void		fill_file(struct stat *stat, t_file_info *file)
+{
+	if (flags & LS_L)
+	{
+		file->mode = stat->st_mode;
+		file->st_uid = stat->st_uid;
+		file->st_gid = stat->st_gid;
+		file->st_rdev = stat->st_rdev;
+		file->st_blocks = stat->st_blocks;
+		file->ftime = stat->st_mtimespec.tv_sec;
+		file->ftime = (flags & LS_U) ? stat->st_atimespec.tv_sec : file->ftime;
+		file->ftime = (flags & LS_UU) ? stat->st_birthtimespec.tv_sec : file->ftime;
+		file->ftime = (flags & LS_C) ? stat->st_ctimespec.tv_sec : file->ftime;
+	}
+	else if (flags & LS_SS)
+		file->st_size = stat->st_size;
+	else if (flags & (LS_U | LS_UU | LS_C | LS_T))
+	{
+		file->ftime = stat->st_mtimespec.tv_sec;
+		file->ftime = (flags & LS_U) ? stat->st_atimespec.tv_sec : file->ftime;
+		file->ftime = (flags & LS_UU) ? stat->st_birthtimespec.tv_sec : file->ftime;
+		file->ftime = (flags & LS_C) ? stat->st_ctimespec.tv_sec : file->ftime;
+	}
+}
+
+static	t_file_info *ft_add_file(char *path, struct dirent	*pDirent)
 {
 	t_file_info		*file;
 	struct stat		*stat;
@@ -177,31 +201,25 @@ static	t_file_info *ft_add_file(char *path,
 	if (!(file = (t_file_info *)malloc(sizeof(t_file_info))))
 		exit(EXIT_FAILURE);
 	ft_memset(file, 0, sizeof(t_file_info));
-	if (!(file->name = ft_strdup(name)))
+	if (!(file->name = ft_strdup(pDirent->d_name)))
 		exit(EXIT_FAILURE);
-	if (!(stat = (struct stat *)malloc(sizeof(struct stat))))
-		exit(EXIT_FAILURE);
-	ft_memset(stat, 0, sizeof(struct stat));
 	if (path[0] == '/' && path[1] == '\0')
 		file->rel_path = ft_strjoin(path, "", 0);
 	else
 		file->rel_path = ft_strjoin(path, "/", 0);
-	file->rel_path = ft_strjoin(file->rel_path, name, 1);
-	lstat(file->rel_path, stat);
-	file->mode = stat->st_mode;
-	file->st_nlink = stat->st_nlink;
-	file->st_uid = stat->st_uid;
-	file->st_gid = stat->st_gid;
-	file->st_size = stat->st_size;
-	file->st_rdev = stat->st_rdev;
-	file->ftime = stat->st_mtimespec.tv_sec;
-	file->ftime = (flags & LS_U) ? stat->st_atimespec.tv_sec : file->ftime;
-	file->ftime = (flags & LS_UU) ? stat->st_birthtimespec.tv_sec : file->ftime;
-	file->ftime = (flags & LS_C) ? stat->st_ctimespec.tv_sec : file->ftime;
-	file->st_blocks = stat->st_blocks;
+	file->rel_path = ft_strjoin(file->rel_path, file->name, 1);
+	file->type = pDirent->d_type;
+	if (flags & (LS_T | LS_UU | LS_U | LS_SS | LS_C | LS_L))
+	{
+		if (!(stat = (struct stat *)malloc(sizeof(struct stat))))
+			exit(EXIT_FAILURE);
+		ft_memset(stat, 0, sizeof(struct stat));
+		lstat(file->rel_path, stat);
+		fill_file(stat, file);
+		free(stat);
+	}
 	file->file_len = ft_strlen(file->name);
-	free(stat);
-	realpath(name, file->full_path);
+	realpath(file->name, file->full_path);
 	return (file);
 }
 
@@ -240,7 +258,7 @@ int		ft_open_dirs(char *path, char *name, size_t check)
 	{
 		if (pDirent->d_name[0] != '.' || (flags & LS_A))
 		{
-			tmp = ft_add_file(path, pDirent->d_name);
+			tmp = ft_add_file(path, pDirent);
 			if (!(ft_vector_push_back((void **)&vector, &tmp)))
 				exit(EXIT_FAILURE);
 			dir_info.file_max_len = dir_info.file_max_len < tmp->file_len ?

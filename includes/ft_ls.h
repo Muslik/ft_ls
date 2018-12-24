@@ -95,12 +95,22 @@ typedef struct	s_file_info
 	off_t				st_size;
 	dev_t				st_rdev;
 	time_t				ftime;
+	unsigned char		type;
 	char				*name;
 	char				full_path[PATH_MAX];
 	char				*rel_path;
-	char				*file_color;
+	char				f_color[9];
 	size_t				file_len;
 }				t_file_info;
+
+#define ANSI_COLOR_BLACK     "\x1b[31m"
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
 
 /*
  ** VECTORS
