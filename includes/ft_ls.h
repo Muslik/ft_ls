@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 17:47:31 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/21 21:06:16 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/24 12:17:34 by narchiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	*ft_vector_get_last_elem(void *ft_vector);
 void	*ft_vector_get_first_elem(void *ft_vector);
 size_t	ft_vector_get_len(void *ft_vector);
 
-int		ft_open_dirs(char *path, char *name);
+int		ft_open_dirs(char *path, char *name, size_t check);
 void	ft_rec_dirs(t_dir_info *dir_info, size_t **vector);
 
 /*
