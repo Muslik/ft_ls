@@ -6,7 +6,7 @@
 #    By: dmorgil  <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/03 16:20:46 by dmorgil           #+#    #+#              #
-#    Updated: 2018/12/24 17:27:46 by narchiba         ###   ########.fr        #
+#    Updated: 2018/12/24 17:30:28 by narchiba         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME=libft.a
@@ -28,7 +28,6 @@ RAW_SRC=ft_memchr.c ft_memccpy.c ft_memmove.c ft_memcpy.c \
 	 ft_isgraph.c ft_strisnumeric.c ft_strislowercase.c ft_strisalpha.c \
 	 ft_iscntrl.c ft_strisprintable.c ft_strlowcase.c ft_strupcase.c ft_strlen.c\
 	 ft_itoa_base.c\
-
 RAW_ASS=ft_memset.s
 # RAW_OBJS=$(RAW_SRC:.c=.o)
 RAW_OBJS=ft_memchr.o ft_memccpy.o ft_memmove.o ft_memcpy.o \

@@ -75,12 +75,12 @@ static void ft_show_time(t_file_info *file)
 	write(1, " ", 1);
 }
 
-int ft_display_list(int *flags, t_file_info *file)
+int ft_display_list(t_file_info *file)
 {
 	char		rights[12];
 	char		buf[NAME_MAX + 1];
 
-	(*flags & LS_SS) ? printf("%zd", file->st_blocks) : 0;
+	(flags & LS_SS) ? printf("%zd", file->st_blocks) : 0;
 	ft_display_permissions(rights, file->mode, file->full_path);
 	printf("%zd ", file->st_nlink);
 	fflush(stdout);
