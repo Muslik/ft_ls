@@ -98,6 +98,7 @@ typedef struct	s_file_info
 	char				*name;
 	char				full_path[PATH_MAX];
 	char				*rel_path;
+	char				*file_color;
 	size_t				file_len;
 }				t_file_info;
 

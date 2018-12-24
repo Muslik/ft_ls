@@ -153,6 +153,13 @@ void	ft_rec_dirs(t_dir_info *dir_info, size_t **vector)
 		while (++i < dir_info->files_ammount)
 		{
 			tmp = (t_file_info *)(*vector)[i];
+			if (flags & LS_A)
+			{
+				if (tmp->name[0] == '.' && tmp->name[1] == '\0')
+					continue;
+				if (tmp->name[0] == '.' && tmp->name[1] == '.' && tmp->name[2] == '\0')
+					continue;
+			}
 			if (S_ISLNK(tmp->mode))
 				continue;
 			ft_open_dirs(tmp->rel_path, tmp->name, 1);
@@ -175,7 +182,10 @@ static	t_file_info *ft_add_file(char *path,
 	if (!(stat = (struct stat *)malloc(sizeof(struct stat))))
 		exit(EXIT_FAILURE);
 	ft_memset(stat, 0, sizeof(struct stat));
-	file->rel_path = ft_strjoin(path, "/", 0);
+	if (path[0] == '/' && path[1] == '\0')
+		file->rel_path = ft_strjoin(path, "", 0);
+	else
+		file->rel_path = ft_strjoin(path, "/", 0);
 	file->rel_path = ft_strjoin(file->rel_path, name, 1);
 	lstat(file->rel_path, stat);
 	file->mode = stat->st_mode;

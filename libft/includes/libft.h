@@ -52,7 +52,7 @@ void			*ft_memchr (const void *arr, int c, size_t n);
 void			*ft_memmove (void *destination, const void *source, size_t n);
 void			*ft_memccpy(void *dest, const void *src, int c, size_t n);
 void			*ft_memcpy(void *dst, const void *src, size_t n);
-void			*ft_memset(void *b, int c, size_t len);
+void			*ft_memset(void *b, char c, size_t len);
 void			ft_bzero(void *s, size_t n);
 
 /*
