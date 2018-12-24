@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/10 19:53:18 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/21 20:52:33 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/24 12:16:25 by narchiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ static void	ft_print_dir_name(int i, int argc, char **argv)
 	if (i == argc)
 	{
 		s = ft_strdup(".");
-		ft_open_dirs(s, s);
+		ft_open_dirs(s, s, 0);
 		return ;
 	}
 	if (i == argc - 1)
 	{
 		s = ft_strdup(argv[i++]);
-		ft_open_dirs(s, s);
+		ft_open_dirs(s, s, 0);
 		free(s);
 		return ;
 	}
@@ -47,7 +47,7 @@ static void	ft_print_dir_name(int i, int argc, char **argv)
 		s = ft_strdup(argv[i++]);
 		ft_putstr(s);
 		ft_putstr(":\n");
-		ft_open_dirs(s, s);
+		ft_open_dirs(s, s, 0);
 	}
 }
 

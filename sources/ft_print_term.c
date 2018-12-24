@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 10:44:36 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/21 21:19:41 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/24 11:33:42 by narchiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static void		print_files(char *buf, size_t *vec_files,
 		}
 		buf[offset++] = '\n';
 	}
-	write(1, buf, ft_strlen(buf));
+	write(1, buf, offset);
 }
 
 void			ft_print_in_terminal(size_t *vec_files, t_dir_info *dir_info)
