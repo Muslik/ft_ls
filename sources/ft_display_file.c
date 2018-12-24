@@ -87,9 +87,9 @@ int		ft_open_dirs(char *path, char *name, size_t check)
 	t_dir_info		dir_info;
 
 	dir_info.file_max_len = 0;
+	ft_print_dir(path, check);
 	if(!(dir = opendir(path)))
 		return (ft_errno_error(path, name));
-	ft_print_dir(path, check);
 	vector = ft_vector_create(sizeof(size_t *));
 	while ((pDirent = readdir(dir)) != NULL)
 	{
