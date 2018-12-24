@@ -60,17 +60,6 @@ typedef	struct	s_ft_merge_info_ft_ls
 	int			(*cmp)(void *data1, void *data2);
 }				t_ft_merge_info_ft_ls;
 
-/*
-** blkcnt_t     - block size
-** mode_t       - file permissions
-** nlink_t      - number of hard links
-** uid_t        - owner name
-** gid_t        - owner group
-** off_t        - file size
-** dev_t        - device type
-** time_t       - last modification time
-** char *name   - file name
-*/
 
 /*
  * Колонки
@@ -83,6 +72,18 @@ typedef	struct	s_dir_info
 	size_t	term_rows;
 	size_t	files_ammount;
 }				t_dir_info;
+
+/*
+ ** blkcnt_t     - block size
+ ** mode_t       - file permissions
+ ** nlink_t      - number of hard links
+ ** uid_t        - owner name
+ ** gid_t        - owner group
+ ** off_t        - file size
+ ** dev_t        - device type
+ ** time_t       - last modification time
+ ** char *name   - file name
+ */
 
 typedef struct	s_file_info
 {
