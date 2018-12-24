@@ -12,24 +12,41 @@
 
 #include "ft_ls.h"
 
+static void			fill_file_long(struct stat *stat, t_file_info *file)
+{
+	file->mode = stat->st_mode;
+	file->st_size = stat->st_size;
+	file->u_name_len = ft_strlen(getpwuid(stat->st_uid)->pw_name);
+	file->g_name_len = ft_strlen(getgrgid(stat->st_gid)->gr_name);
+	file->str_size = ft_itoa_base(stat->st_size, 10, 0);
+	file->u_name = malloc(file->u_name_len);
+	file->g_name = malloc(file->g_name_len);
+	ft_memmove(file->u_name, getpwuid(stat->st_uid)->pw_name, file->u_name_len);
+	ft_memmove(file->g_name, getgrgid(stat->st_gid)->gr_name, file->g_name_len);
+	file->minor = ft_itoa_base(minor(stat->st_rdev),10,0);
+	file->major = ft_itoa_base(major(stat->st_rdev),10,0);
+	file->st_nlink = ft_itoa_base(stat->st_nlink,10,0);
+	file->st_blocks = stat->st_blocks;
+	file->ftime = stat->st_mtimespec.tv_sec;
+	file->ftime = (flags & LS_U) ? stat->st_atimespec.tv_sec : file->ftime;
+	file->ftime = (flags & LS_UU) ? stat->st_birthtimespec.tv_sec : file->ftime;
+	file->ftime = (flags & LS_C) ? stat->st_ctimespec.tv_sec : file->ftime;
+	file->size_len = ft_strlen(file->str_size);
+	file->nlink_len = ft_strlen(file->st_nlink);
+	file->minor_len = ft_strlen(file->minor);
+	file->major_len = ft_strlen(file->major);
+}
+
 static void			fill_file(struct stat *stat, t_file_info *file)
 {
 	if (flags & LS_L)
 	{
-		file->mode = stat->st_mode;
-		file->st_size = stat->st_size;
-		file->st_uid = stat->st_uid;
-		file->st_gid = stat->st_gid;
-		file->st_rdev = stat->st_rdev;
-		file->st_nlink = stat->st_nlink;
-		file->st_blocks = stat->st_blocks;
-		file->ftime = stat->st_mtimespec.tv_sec;
-		file->ftime = (flags & LS_U) ? stat->st_atimespec.tv_sec : file->ftime;
-		file->ftime = (flags & LS_UU) ? stat->st_birthtimespec.tv_sec : file->ftime;
-		file->ftime = (flags & LS_C) ? stat->st_ctimespec.tv_sec : file->ftime;
+		fill_file_long(stat, file);
 	}
 	else if (flags & LS_SS)
+	{
 		file->st_size = stat->st_size;
+	}
 	else if (flags & (LS_U | LS_UU | LS_C | LS_T))
 	{
 		file->ftime = stat->st_mtimespec.tv_sec;

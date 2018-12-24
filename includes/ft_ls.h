@@ -71,6 +71,13 @@ typedef	struct	s_dir_info
 	size_t	file_max_len;
 	size_t	term_rows;
 	size_t	files_ammount;
+	size_t	links_max_len;
+	size_t	u_name_max_len;
+	size_t	g_name_max_len;
+	size_t	size_max_len;
+	size_t	minor_max_len;
+	size_t	major_max_len;
+	size_t	total;
 }				t_dir_info;
 
 /*
@@ -89,11 +96,13 @@ typedef struct	s_file_info
 {
 	blkcnt_t			st_blocks;
 	mode_t				mode;
-	nlink_t				st_nlink;
-	uid_t				st_uid;
-	gid_t				st_gid;
+	char				*st_nlink;
+	char				*minor;
+	char				*major;
+	char				*u_name;
+	char				*g_name;
 	off_t				st_size;
-	dev_t				st_rdev;
+	char				*str_size;
 	time_t				ftime;
 	unsigned char		type;
 	char				*name;
@@ -101,6 +110,12 @@ typedef struct	s_file_info
 	char				*rel_path;
 	char				f_color[9];
 	size_t				file_len;
+	size_t				size_len;
+	size_t				nlink_len;
+	size_t				u_name_len;
+	size_t				g_name_len;
+	size_t				minor_len;
+	size_t				major_len;
 }				t_file_info;
 
 #define ANSI_COLOR_BLACK     "\x1b[31m"
@@ -109,7 +124,7 @@ typedef struct	s_file_info
 #define ANSI_COLOR_YELLOW  "\x1b[33m"
 #define ANSI_COLOR_BLUE    "\x1b[34m"
 #define ANSI_COLOR_MAGENTA "\x1b[35m"
-#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_CYAN    "\x1b[36"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
 /*
@@ -141,7 +156,7 @@ int		ft_errno_error(char *path, char *name);
 /*
  **
 */
-int		ft_display_list(t_file_info *file);
+int		ft_display_list(t_file_info *file, t_dir_info *dir_info, char *buf, size_t offset);
 void	ft_print_files(size_t *vector, t_dir_info *dir_info);
 int		cmp_alpha(void *data1, void *data2);
 int		rev_cmp_alpha(void *data1, void *data2);

@@ -22,7 +22,13 @@ void	ft_free_vec_of_files(t_dir_info *dir_info, size_t *vector)
 	{
 		tmp = (t_file_info *)(vector)[i];
 		free(tmp->name);
+		free(tmp->u_name);
+		free(tmp->g_name);
 		free(tmp->rel_path);
+		free(tmp->str_size);
+		free(tmp->minor);
+		free(tmp->major);
+		free(tmp->st_nlink);
 		free(tmp);
 	}
 	free(vector);
@@ -78,6 +84,38 @@ void	ft_print_dir(char *path, size_t check)
 	}
 }
 
+void	fill_dir_info(t_dir_info *dir_info, t_file_info *tmp)
+{
+	dir_info->file_max_len = dir_info->file_max_len < tmp->file_len ?
+		tmp->file_len : dir_info->file_max_len;
+	dir_info->size_max_len = dir_info->size_max_len < tmp->size_len ?
+		tmp->size_len : dir_info->size_max_len;
+	dir_info->links_max_len = dir_info->links_max_len < tmp->nlink_len ?
+		tmp->nlink_len : dir_info->links_max_len;
+	dir_info->u_name_max_len = dir_info->u_name_max_len < tmp->u_name_len ?
+		tmp->u_name_len : dir_info->u_name_max_len;
+	dir_info->g_name_max_len = dir_info->g_name_max_len < tmp->g_name_len ?
+		tmp->g_name_len : dir_info->g_name_max_len;
+	dir_info->minor_max_len = dir_info->minor_max_len < tmp->minor_len ?
+		tmp->minor_len : dir_info->minor_max_len;
+	dir_info->major_max_len = dir_info->major_max_len < tmp->major_len ?
+		tmp->major_len : dir_info->major_max_len;
+	dir_info->total += tmp->st_blocks;
+}
+
+void	ft_init_dir_info(t_dir_info *dir_info)
+{
+	dir_info->file_max_len = 0;
+	dir_info->size_max_len = 0;
+	dir_info->links_max_len = 0;
+	dir_info->u_name_max_len = 0;
+	dir_info->g_name_max_len = 0;
+	dir_info->minor_max_len = 0;
+	dir_info->major_max_len = 0;
+	dir_info->total = 0;
+	dir_info->file_max_len = 0;
+}
+
 int		ft_open_dirs(char *path, char *name, size_t check)
 {
 	DIR				*dir;
@@ -86,11 +124,11 @@ int		ft_open_dirs(char *path, char *name, size_t check)
 	t_file_info		*tmp;
 	t_dir_info		dir_info;
 
-	dir_info.file_max_len = 0;
 	ft_print_dir(path, check);
 	if(!(dir = opendir(path)))
 		return (ft_errno_error(path, name));
 	vector = ft_vector_create(sizeof(size_t *));
+	ft_init_dir_info(&dir_info);
 	while ((pDirent = readdir(dir)) != NULL)
 	{
 		if (pDirent->d_name[0] != '.' || (flags & LS_A))
@@ -98,8 +136,7 @@ int		ft_open_dirs(char *path, char *name, size_t check)
 			tmp = ft_add_file(path, pDirent);
 			if (!(ft_vector_push_back((void **)&vector, &tmp)))
 				exit(EXIT_FAILURE);
-			dir_info.file_max_len = dir_info.file_max_len < tmp->file_len ?
-				tmp->file_len : dir_info.file_max_len;
+			fill_dir_info(&dir_info, tmp);
 		}
 	}
 	dir_info.files_ammount = ft_vector_get_len(vector);

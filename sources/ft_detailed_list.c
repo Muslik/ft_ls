@@ -28,7 +28,7 @@ static char ft_get_file_type(int mode)
 	return (filetype);
 }
 
-static char ft_get_file_acl(char path[PATH_MAX])
+static char ft_get_file_acl(char *path)
 {
 	ssize_t		xattr;
 	acl_entry_t dummy;
@@ -37,13 +37,17 @@ static char ft_get_file_acl(char path[PATH_MAX])
 
 	acl = acl_get_link_np(path, ACL_TYPE_EXTENDED);
     if (acl && acl_get_entry(acl, ACL_FIRST_ENTRY, &dummy) == -1)
-        acl_free(acl);
+	{
+		acl = NULL;
+	}
 	xattr = listxattr(path, NULL, 0, XATTR_NOFOLLOW);
-	return (sym = (xattr > 0) ? '@' : ' ');
-	return (sym = (acl != NULL) ? '+' : sym);
+	sym = (xattr > 0) ? '@' : ' ';
+	sym = (acl != NULL) ? '+' : sym;
+	acl_free(acl);
+	return (sym);
 }
 
-static void	ft_display_permissions(char rights[12], int mode, char path[PATH_MAX])
+static void	ft_fill_permissions(char *rights, int mode, char *path)
 {
 	rights[0] = ft_get_file_type(mode);
 	rights[1] = (mode & S_IRUSR) ? 'r' : '-';
@@ -56,58 +60,76 @@ static void	ft_display_permissions(char rights[12], int mode, char path[PATH_MAX
     rights[8] = (mode & S_IWOTH) ? 'w' : '-';
     rights[9] = (mode & S_IXOTH) ? 'x' : '-';
 	rights[10] = ft_get_file_acl(path);
-	rights[11] = '\0';
+	rights[11] = ' ';
 	if (mode & S_ISUID)
 		rights[3] = ('x' == rights[3] ? 's' : 'S');
 	if (mode & S_ISGID)
 		rights[6] = ('x' == rights[6] ? 's' : 'S');
 	if (mode & S_ISVTX)
 		rights[9] = ('x' == rights[9] ? 't' : 'T');
-	ft_putstr(rights);
 }
 
-static void ft_show_time(t_file_info *file)
+static char *ft_show_time(t_file_info *file)
 {
 	char		*file_time;
 
 	file_time = ctime(&(file->ftime)) + 4;
-	write(1, file_time, 12);
-	write(1, " ", 1);
+	return (file_time);
 }
 
-int ft_display_list(t_file_info *file)
+int ft_display_list(t_file_info *file, t_dir_info *dir_info, char *buf, size_t offset)
 {
-	char		rights[12];
-	char		buf[NAME_MAX + 1];
+	/* char		link_buf[NAME_MAX + 1]; */
 
-	(flags & LS_SS) ? printf("%zd", file->st_blocks) : 0;
-	ft_display_permissions(rights, file->mode, file->full_path);
-	printf("%zd ", file->st_nlink);
-	fflush(stdout);
-	printf("%s  ", (getpwuid(file->st_uid))->pw_name);
-	fflush(stdout);
-	printf("%s  ", (getgrgid(file->st_gid))->gr_name);
-	fflush(stdout);
-	if (rights[0] != 'b' && rights[0] != 'c')
-		printf("%zd ", file->st_size);
-	else
-	{
-		printf(" %zd,   ", major(file->st_rdev));
-		printf("%zd ", minor(file->st_rdev));
-	}
-	fflush(stdout);
-	ft_show_time(file);
-	if (rights[0] != 'l')
-	{
-		printf("%s", file->name);
-		fflush(stdout);
-	}
-	else
-	{
-		ft_bzero(buf, NAME_MAX + 1);
-		readlink(file->full_path, buf, NAME_MAX);
-		printf("%s -> %s", file->name, buf);
-		fflush(stdout);
-	}
+	ft_fill_permissions(buf + offset, file->mode, file->rel_path);
+	offset += 12;
+	ft_memset(buf + offset, ' ', dir_info->links_max_len - file->nlink_len);
+	offset += dir_info->links_max_len - file->nlink_len;
+	ft_memmove(buf + offset, file->st_nlink, file->nlink_len);
+	offset += file->nlink_len;
+	buf[offset++] = ' ';
+	ft_memset(buf + offset, ' ', dir_info->u_name_max_len - file->u_name_len);
+	offset += dir_info->u_name_max_len - file->u_name_len;
+	ft_memmove(buf + offset, file->u_name, file->u_name_len);
+	offset += file->u_name_len;
+	buf[offset++] = ' ';
+	buf[offset++] = ' ';
+	ft_memset(buf + offset, ' ', dir_info->g_name_max_len - file->g_name_len);
+	offset += dir_info->g_name_max_len - file->g_name_len;
+	ft_memmove(buf + offset, file->g_name, file->g_name_len);
+	offset += file->g_name_len;
+	buf[offset++] = ' ';
+	buf[offset++] = ' ';
+	ft_memset(buf + offset, ' ', dir_info->size_max_len - file->size_len);
+	offset += dir_info->size_max_len - file->size_len;
+	ft_memmove(buf + offset, file->str_size, file->size_len);
+	offset += file->size_len;
+	buf[offset++] = ' ';
+	ft_memmove(buf + offset, ft_show_time(file), 12);
+	offset += 12;
+	buf[offset++] = ' ';
+	ft_memmove(buf + offset, file->name, file->file_len);
+	offset += file->file_len;
+	buf[offset++] = '\n';
+	return (offset);
+	/* if (rights[0] != 'b' && rights[0] != 'c') */
+	/* 	printf("%s ", file->str_size); */
+	/* else */
+	/* { */
+	/* 	printf(" %s,   ", file->major); */
+	/* 	printf("%s ", file->minor); */
+	/* } */
+	/* if (rights[0] != 'l') */
+	/* { */
+	/* 	printf("%s", file->name); */
+	/* 	fflush(stdout); */
+	/* } */
+	/* else */
+	/* { */
+	/* 	ft_memset(link_buf, 0, NAME_MAX + 1); */
+	/* 	readlink(file->full_path, link_buf, NAME_MAX); */
+	/* 	printf("%s -> %s", file->name, buf); */
+	/* 	fflush(stdout); */
+	/* } */
 	return (1);
 }

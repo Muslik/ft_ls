@@ -20,7 +20,7 @@ static void	ft_print_in_pipe(size_t *vector, t_dir_info *dir_info)
 	size_t		offset;
 	size_t		buf_len;
 
-	buf_len = (dir_info->file_max_len + 1) * dir_info->files_ammount;
+	buf_len = (dir_info->file_max_len + 1) * (dir_info->files_ammount);
 	if (!(buf = malloc(buf_len)))
 		exit(EXIT_FAILURE);
 	ft_memset(buf, 0, buf_len);
@@ -40,17 +40,28 @@ void	ft_print_long(size_t *vector, t_dir_info *dir_info)
 {
 	t_file_info *tmp;
 	size_t		i;
+	char		*buf;
+	size_t		offset;
+	size_t		sum;
+	size_t		buf_len;
 
 	i = -1;
 	(void)dir_info;
+	sum = dir_info->major_max_len + dir_info->minor_max_len;
+	sum = (dir_info->size_max_len > (sum)) ?  dir_info->size_max_len : sum;
+	buf_len = dir_info->file_max_len + dir_info->links_max_len +
+		dir_info->u_name_max_len + dir_info->g_name_max_len + sum + 32;
+	offset = 0;
+	if (!(buf = (char *)malloc(buf_len * dir_info->files_ammount)))
+		exit(EXIT_FAILURE);
+	ft_memset(buf, 0, buf_len);
 	while (++i < dir_info->files_ammount)
 	{
 		tmp = (t_file_info *)(vector[i]);
-		ft_display_list(tmp);
-		printf("\n");
-		fflush(stdout);
+		offset = ft_display_list(tmp, dir_info, buf, offset);
 	}
-
+	write(1, buf, offset);
+	free(buf);
 }
 
 void	ft_print_files(size_t *vector, t_dir_info *dir_info)
