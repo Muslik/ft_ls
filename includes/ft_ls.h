@@ -141,6 +141,7 @@ int		ft_errno_error(char *path, char *name);
 /*
  **
 */
+int		ft_display_list(t_file_info *file);
 void	ft_print_files(size_t *vector, t_dir_info *dir_info);
 int		cmp_alpha(void *data1, void *data2);
 int		rev_cmp_alpha(void *data1, void *data2);

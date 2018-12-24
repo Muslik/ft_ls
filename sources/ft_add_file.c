@@ -17,9 +17,11 @@ static void			fill_file(struct stat *stat, t_file_info *file)
 	if (flags & LS_L)
 	{
 		file->mode = stat->st_mode;
+		file->st_size = stat->st_size;
 		file->st_uid = stat->st_uid;
 		file->st_gid = stat->st_gid;
 		file->st_rdev = stat->st_rdev;
+		file->st_nlink = stat->st_nlink;
 		file->st_blocks = stat->st_blocks;
 		file->ftime = stat->st_mtimespec.tv_sec;
 		file->ftime = (flags & LS_U) ? stat->st_atimespec.tv_sec : file->ftime;

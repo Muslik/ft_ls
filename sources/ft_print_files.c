@@ -36,12 +36,34 @@ static void	ft_print_in_pipe(size_t *vector, t_dir_info *dir_info)
 	write(1, buf, offset);
 	free(buf);
 }
+void	ft_print_long(size_t *vector, t_dir_info *dir_info)
+{
+	t_file_info *tmp;
+	size_t		i;
+
+	i = -1;
+	(void)dir_info;
+	while (++i < dir_info->files_ammount)
+	{
+		tmp = (t_file_info *)(vector[i]);
+		ft_display_list(tmp);
+		printf("\n");
+		fflush(stdout);
+	}
+
+}
 
 void	ft_print_files(size_t *vector, t_dir_info *dir_info)
 {
-	// CHOOSE OPTION OF PRINT
-	if (isatty(1))
-		ft_print_in_terminal(vector, dir_info);
+	if (flags & LS_L)
+	{
+		ft_print_long(vector, dir_info);
+	}
 	else
-		ft_print_in_pipe(vector, dir_info);
+	{
+		if (isatty(1))
+			ft_print_in_terminal(vector, dir_info);
+		else
+			ft_print_in_pipe(vector, dir_info);
+	}
 }

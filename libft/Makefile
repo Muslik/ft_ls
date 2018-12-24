@@ -26,8 +26,8 @@ RAW_SRC=ft_memchr.c ft_memccpy.c ft_memmove.c ft_memcpy.c \
 	 ft_lstdelone.c ft_lstdel.c ft_lstadd.c ft_lstiter.c ft_lstmap.c \
 	 ft_isblank.c ft_islower.c ft_isspace.c ft_isupper.c ft_isxdigit.c \
 	 ft_isgraph.c ft_strisnumeric.c ft_strislowercase.c ft_strisalpha.c \
-	 ft_iscntrl.c ft_strisprintable.c ft_strlowcase.c ft_strupcase.c
-RAW_ASS=ft_memset.s ft_strlen.s
+	 ft_iscntrl.c ft_strisprintable.c ft_strlowcase.c ft_strupcase.c ft_strlen.c
+RAW_ASS=ft_memset.s
 # RAW_OBJS=$(RAW_SRC:.c=.o)
 RAW_OBJS=ft_memchr.o ft_memccpy.o ft_memmove.o ft_memcpy.o \
 	 ft_memcmp.o ft_strlen.o ft_strdup.o ft_strcpy.o ft_strncpy.o ft_strcat.o \
