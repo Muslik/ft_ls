@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:31:17 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/24 16:20:55 by narchiba         ###   ########.fr       */
+/*   Updated: 2018/12/25 15:31:49 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,20 +100,29 @@ void	fill_dir_info(t_dir_info *dir_info, t_file_info *tmp)
 		tmp->minor_len : dir_info->minor_max_len;
 	dir_info->major_max_len = dir_info->major_max_len < tmp->major_len ?
 		tmp->major_len : dir_info->major_max_len;
+	dir_info->lnk_max_len = dir_info->lnk_max_len < tmp->lnk_len ?
+		tmp->lnk_len : dir_info->lnk_max_len;
+	dir_info->size_max_len = dir_info->size_max_len <
+		dir_info->minor_max_len + dir_info->major_max_len + 3 ?
+		dir_info->minor_max_len + dir_info->major_max_len + 3 :
+		dir_info->size_max_len;
 	dir_info->total += tmp->st_blocks;
+	dir_info->lnk_ammount += (tmp->lnk_len) ? 1 : 0;
 }
 
 void	ft_init_dir_info(t_dir_info *dir_info)
 {
+	dir_info->lnk_ammount = 0;
 	dir_info->file_max_len = 0;
 	dir_info->size_max_len = 0;
 	dir_info->links_max_len = 0;
+	dir_info->lnk_max_len = 0;
 	dir_info->u_name_max_len = 0;
 	dir_info->g_name_max_len = 0;
 	dir_info->minor_max_len = 0;
 	dir_info->major_max_len = 0;
-	dir_info->total = 0;
 	dir_info->file_max_len = 0;
+	dir_info->total = 0;
 }
 
 int		ft_open_dirs(char *path, char *name, size_t check)

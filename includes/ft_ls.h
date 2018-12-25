@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 17:47:31 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/24 16:24:30 by narchiba         ###   ########.fr       */
+/*   Updated: 2018/12/25 15:25:16 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,9 @@ typedef	struct	s_dir_info
 	size_t	size_max_len;
 	size_t	minor_max_len;
 	size_t	major_max_len;
+	size_t	lnk_max_len;
 	size_t	total;
+	size_t	lnk_ammount;
 }				t_dir_info;
 
 /*
@@ -96,6 +98,7 @@ typedef struct	s_file_info
 {
 	blkcnt_t			st_blocks;
 	mode_t				mode;
+	char				lnk[PATH_MAX + 1];
 	char				*st_nlink;
 	char				*minor;
 	char				*major;
@@ -109,6 +112,7 @@ typedef struct	s_file_info
 	char				full_path[PATH_MAX];
 	char				*rel_path;
 	char				f_color[9];
+	size_t				lnk_len;
 	size_t				file_len;
 	size_t				size_len;
 	size_t				nlink_len;
