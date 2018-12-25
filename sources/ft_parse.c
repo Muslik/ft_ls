@@ -6,13 +6,13 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/14 13:39:24 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/25 16:18:13 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 17:02:26 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static int ft_strchr_by_index(char *str, int c)
+static int	ft_strchr_by_index(char *str, int c)
 {
 	int j;
 
@@ -26,16 +26,16 @@ static int ft_strchr_by_index(char *str, int c)
 	return (-1);
 }
 
-int 	ft_usage_error(char c)
+int			ft_usage_error(char c)
 {
-		ft_putstr_fd("./ft_ls: illegal option -- ", 2);
-		ft_putchar_fd(c, 2);
-		ft_putstr_fd("\nusage: ./ft_ls [-aflRrtG1Ss] [file ...]", 2);
-		exit(EXIT_FAILURE);
-		return (1);
+	ft_putstr_fd("./ft_ls: illegal option -- ", 2);
+	ft_putchar_fd(c, 2);
+	ft_putstr_fd("\nusage: ./ft_ls [-aflRrtG1Ss] [file ...]", 2);
+	exit(EXIT_FAILURE);
+	return (1);
 }
 
-int		ft_errno_error(char *path, char *name)
+int			ft_errno_error(char *path, char *name)
 {
 	if (errno != 20)
 	{
@@ -67,17 +67,16 @@ static int	ft_add_flags(char *str)
 	return (1);
 }
 
-int		ft_get_flags(int argc, char **argv)
+int			ft_get_flags(int argc, char **argv)
 {
 	int i;
 
 	i = 1;
 	while (i < argc && argv[i][0] == '-' && argv[i][1] != '\0')
 	{
-		if(!ft_add_flags(argv[i]))
+		if (!ft_add_flags(argv[i]))
 			return (-1);
 		i++;
 	}
 	return (i);
 }
-

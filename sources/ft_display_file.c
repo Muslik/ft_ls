@@ -6,38 +6,15 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:31:17 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/25 16:18:45 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 17:27:33 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	ft_free_vec_of_files(t_dir_info *dir_info, size_t *vector)
-{
-	size_t		i;
-	t_file_info *tmp;
-
-	i = -1;
-	while (++i < dir_info->files_ammount)
-	{
-		tmp = (t_file_info *)(vector)[i];
-		free(tmp->name);
-		free(tmp->u_name);
-		free(tmp->g_name);
-		free(tmp->rel_path);
-		free(tmp->str_size);
-		free(tmp->minor);
-		free(tmp->major);
-		free(tmp->st_nlink);
-		free(tmp);
-	}
-	free(vector);
-
-}
-
 void	ft_rec_dirs(t_dir_info *dir_info, size_t **vector)
 {
-	size_t i;
+	size_t		i;
 	t_file_info *tmp;
 
 	i = -1;
@@ -52,12 +29,9 @@ void	ft_rec_dirs(t_dir_info *dir_info, size_t **vector)
 		{
 			tmp = (t_file_info *)(*vector)[i];
 			if (g_flags & LS_A)
-			{
-				if (tmp->name[0] == '.' && tmp->name[1] == '\0')
+				if (tmp->name[0] == '.' && (tmp->name[1] == '\0' ||
+							(tmp->name[1] == '.' && tmp->name[2] == '\0')))
 					continue;
-				if (tmp->name[0] == '.' && tmp->name[1] == '.' && tmp->name[2] == '\0')
-					continue;
-			}
 			if (tmp->type != DT_DIR)
 				continue;
 			ft_open_dirs(tmp->rel_path, tmp->name, 1);
@@ -129,20 +103,20 @@ int		ft_open_dirs(char *path, char *name, size_t check)
 {
 	DIR				*dir;
 	size_t			*vector;
-	struct dirent	*pDirent;
+	struct dirent	*pdirent;
 	t_file_info		*tmp;
 	t_dir_info		dir_info;
 
 	ft_print_dir(path, check);
-	if(!(dir = opendir(path)))
+	if (!(dir = opendir(path)))
 		return (ft_errno_error(path, name));
 	vector = ft_vector_create(sizeof(size_t *));
 	ft_init_dir_info(&dir_info);
-	while ((pDirent = readdir(dir)) != NULL)
+	while ((pdirent = readdir(dir)) != NULL)
 	{
-		if (pDirent->d_name[0] != '.' || (g_flags & LS_A))
+		if (pdirent->d_name[0] != '.' || (g_flags & LS_A))
 		{
-			tmp = ft_add_file(path, pDirent);
+			tmp = ft_add_file(path, pdirent);
 			if (!(ft_vector_push_back((void **)&vector, &tmp)))
 				exit(EXIT_FAILURE);
 			fill_dir_info(&dir_info, tmp);

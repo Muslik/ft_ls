@@ -6,13 +6,33 @@
 /*   By: narchiba <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/26 19:04:09 by narchiba          #+#    #+#             */
-/*   Updated: 2018/12/12 20:04:25 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 16:53:19 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <string.h>
 #include "ft_ls.h"
+
+void	ft_free_vec_of_files(t_dir_info *dir_info, size_t *vector)
+{
+	size_t		i;
+	t_file_info *tmp;
+
+	i = -1;
+	while (++i < dir_info->files_ammount)
+	{
+		tmp = (t_file_info *)(vector)[i];
+		free(tmp->name);
+		free(tmp->u_name);
+		free(tmp->g_name);
+		free(tmp->rel_path);
+		free(tmp->str_size);
+		free(tmp->minor);
+		free(tmp->major);
+		free(tmp->st_nlink);
+		free(tmp);
+	}
+	free(vector);
+}
 
 void	ft_vector_free(void **ft_vector)
 {

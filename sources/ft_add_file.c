@@ -6,15 +6,14 @@
 /*   By: narchiba <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 15:59:25 by narchiba          #+#    #+#             */
-/*   Updated: 2018/12/25 16:20:11 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 16:58:41 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static void			fill_file_long(struct stat *stat, t_file_info *file)
+static void			is_link(t_file_info *file)
 {
-	file->mode = stat->st_mode;
 	if (S_ISLNK(file->mode))
 	{
 		ft_memset(file->lnk, 0, PATH_MAX + 1);
@@ -23,6 +22,12 @@ static void			fill_file_long(struct stat *stat, t_file_info *file)
 	}
 	else
 		file->lnk_len = 0;
+}
+
+static void			fill_file_long(struct stat *stat, t_file_info *file)
+{
+	file->mode = stat->st_mode;
+	is_link(file);
 	file->st_size = stat->st_size;
 	file->u_name_len = ft_strlen(getpwuid(stat->st_uid)->pw_name);
 	file->u_name = malloc(file->u_name_len);
@@ -37,7 +42,8 @@ static void			fill_file_long(struct stat *stat, t_file_info *file)
 	file->st_blocks = stat->st_blocks;
 	file->ftime = stat->st_mtimespec.tv_sec;
 	file->ftime = (g_flags & LS_U) ? stat->st_atimespec.tv_sec : file->ftime;
-	file->ftime = (g_flags & LS_UU) ? stat->st_birthtimespec.tv_sec : file->ftime;
+	file->ftime = (g_flags & LS_UU) ? stat->st_birthtimespec.tv_sec :
+		file->ftime;
 	file->ftime = (g_flags & LS_C) ? stat->st_ctimespec.tv_sec : file->ftime;
 	file->size_len = ft_strlen(file->str_size);
 	file->nlink_len = ft_strlen(file->st_nlink);
@@ -58,13 +64,16 @@ static void			fill_file(struct stat *stat, t_file_info *file)
 	else if (g_flags & (LS_U | LS_UU | LS_C | LS_T))
 	{
 		file->ftime = stat->st_mtimespec.tv_sec;
-		file->ftime = (g_flags & LS_U) ? stat->st_atimespec.tv_sec : file->ftime;
-		file->ftime = (g_flags & LS_UU) ? stat->st_birthtimespec.tv_sec : file->ftime;
-		file->ftime = (g_flags & LS_C) ? stat->st_ctimespec.tv_sec : file->ftime;
+		file->ftime = (g_flags & LS_U) ? stat->st_atimespec.tv_sec :
+			file->ftime;
+		file->ftime = (g_flags & LS_UU) ? stat->st_birthtimespec.tv_sec :
+			file->ftime;
+		file->ftime = (g_flags & LS_C) ? stat->st_ctimespec.tv_sec :
+			file->ftime;
 	}
 }
 
-t_file_info	*ft_add_file(char *path, struct dirent	*pDirent)
+t_file_info			*ft_add_file(char *path, struct dirent	*pdirent)
 {
 	t_file_info		*file;
 	struct stat		*stat;
@@ -72,21 +81,19 @@ t_file_info	*ft_add_file(char *path, struct dirent	*pDirent)
 	if (!(file = (t_file_info *)malloc(sizeof(t_file_info))))
 		exit(EXIT_FAILURE);
 	ft_memset(file, 0, sizeof(t_file_info));
-	if (!(file->name = ft_strdup(pDirent->d_name)))
+	if (!(file->name = ft_strdup(pdirent->d_name)))
 		exit(EXIT_FAILURE);
-	if (path[0] == '/' && path[1] == '\0')
-		file->rel_path = ft_strjoin(path, "", 0);
-	else
-		file->rel_path = ft_strjoin(path, "/", 0);
+	file->rel_path = (path[0] == '/' && path[1] == '\0') ?
+		ft_strjoin(path, "", 0) : ft_strjoin(path, "/", 0);
 	file->rel_path = ft_strjoin(file->rel_path, file->name, 1);
-	file->type = pDirent->d_type;
+	file->type = pdirent->d_type;
 	file->file_len = ft_strlen(file->name);
 	realpath(file->name, file->full_path);
 	if (g_flags & (LS_T | LS_UU | LS_U | LS_SS | LS_C | LS_L))
 	{
 		if (!(stat = (struct stat *)malloc(sizeof(struct stat))))
 			exit(EXIT_FAILURE);
-		ft_memset(stat, 0 , sizeof(struct stat));
+		ft_memset(stat, 0, sizeof(struct stat));
 		lstat(file->rel_path, stat);
 		fill_file(stat, file);
 		free(stat);

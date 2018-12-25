@@ -6,59 +6,24 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 11:10:01 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/25 15:41:32 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 17:40:08 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static char ft_get_file_type(int mode)
-{
-	char		filetype;
-
-	/* mode = mode & S_IFMT; */
-	filetype = 0;
-	filetype = (S_ISDIR(mode)) ? 'd' : filetype;
-	filetype = (S_ISCHR(mode)) ? 'c' : filetype;
-	filetype = (S_ISBLK(mode)) ? 'b' : filetype;
-	filetype = (S_ISREG(mode)) ? '-' : filetype;
-	filetype = (S_ISFIFO(mode)) ? 'p' : filetype;
-	filetype = (S_ISLNK(mode)) ? 'l' : filetype;
-	filetype = (S_ISSOCK(mode)) ? 's' : filetype;
-	return (filetype);
-}
-
-static char ft_get_file_acl(char *path)
-{
-	ssize_t		xattr;
-	acl_entry_t dummy;
-	acl_t		acl;
-	char		sym;
-
-	acl = acl_get_link_np(path, ACL_TYPE_EXTENDED);
-    if (acl && acl_get_entry(acl, ACL_FIRST_ENTRY, &dummy) == -1)
-	{
-		acl = NULL;
-	}
-	xattr = listxattr(path, NULL, 0, XATTR_NOFOLLOW);
-	sym = (xattr > 0) ? '@' : ' ';
-	sym = (acl != NULL) ? '+' : sym;
-	acl_free(acl);
-	return (sym);
-}
-
 static void	ft_fill_permissions(char *rights, int mode, char *path)
 {
 	rights[0] = ft_get_file_type(mode);
 	rights[1] = (mode & S_IRUSR) ? 'r' : '-';
-    rights[2] = (mode & S_IWUSR) ? 'w' : '-';
-    rights[3] = (mode & S_IXUSR) ? 'x' : '-';
-    rights[4] = (mode & S_IRGRP) ? 'r' : '-';
-    rights[5] = (mode & S_IWGRP) ? 'w' : '-';
-    rights[6] = (mode & S_IXGRP) ? 'x' : '-';
-    rights[7] = (mode & S_IROTH) ? 'r' : '-';
-    rights[8] = (mode & S_IWOTH) ? 'w' : '-';
-    rights[9] = (mode & S_IXOTH) ? 'x' : '-';
+	rights[2] = (mode & S_IWUSR) ? 'w' : '-';
+	rights[3] = (mode & S_IXUSR) ? 'x' : '-';
+	rights[4] = (mode & S_IRGRP) ? 'r' : '-';
+	rights[5] = (mode & S_IWGRP) ? 'w' : '-';
+	rights[6] = (mode & S_IXGRP) ? 'x' : '-';
+	rights[7] = (mode & S_IROTH) ? 'r' : '-';
+	rights[8] = (mode & S_IWOTH) ? 'w' : '-';
+	rights[9] = (mode & S_IXOTH) ? 'x' : '-';
 	rights[10] = ft_get_file_acl(path);
 	rights[11] = ' ';
 	if (mode & S_ISUID)
@@ -68,16 +33,47 @@ static void	ft_fill_permissions(char *rights, int mode, char *path)
 	if (mode & S_ISVTX)
 		rights[9] = ('x' == rights[9] ? 't' : 'T');
 }
-
-static char *ft_show_time(t_file_info *file)
+static void	ft_char_block(t_file_info *file, t_dir_info *dir_info, char *buf,
+							size_t *offset)
 {
-	char		*file_time;
-
-	file_time = ctime(&(file->ftime)) + 4;
-	return (file_time);
+	if (S_ISCHR(file->mode) || S_ISBLK(file->mode))
+	{
+		buf[*offset++] = ' ';
+		ft_memset(buf + *offset, ' ', dir_info->major_max_len - file->major_len);
+		*offset += dir_info->major_max_len - file->major_len;
+		ft_memmove(buf + *offset, file->major, file->major_len);
+		*offset += file->major_len;
+		buf[*offset++] = ',';
+		buf[*offset++] = ' ';
+		ft_memset(buf + *offset, ' ', dir_info->minor_max_len - file->minor_len);
+		*offset += dir_info->minor_max_len - file->minor_len;
+		ft_memmove(buf + *offset, file->minor, file->minor_len);
+		*offset += file->minor_len;
+		buf[*offset++] = ' ';
+	}
+	else
+	{
+		ft_memset(buf + *offset, ' ', dir_info->size_max_len - file->size_len);
+		*offset += dir_info->size_max_len - file->size_len;
+		ft_memmove(buf + *offset, file->str_size, file->size_len);
+		*offset += file->size_len;
+		buf[*offset++] = ' ';
+	}
 }
 
-int ft_display_list(t_file_info *file, t_dir_info *dir_info, char *buf, size_t offset)
+static void	ft_lnk(t_file_info *file, char *buf, size_t *offset)
+{
+	if (file->lnk_len)
+	{
+		ft_memmove(buf + *offset, " -> ", 4);
+		*offset += 4;
+		ft_memmove(buf + *offset, file->lnk, file->lnk_len);
+		*offset += file->lnk_len;
+	}
+}
+
+int			ft_display_list(t_file_info *file, t_dir_info *dir_info, char *buf,
+		size_t offset)
 {
 	ft_fill_permissions(buf + offset, file->mode, file->rel_path);
 	offset += 12;
@@ -94,41 +90,13 @@ int ft_display_list(t_file_info *file, t_dir_info *dir_info, char *buf, size_t o
 	offset += file->g_name_len;
 	ft_memset(buf + offset, ' ', dir_info->g_name_max_len - file->g_name_len + 2);
 	offset += dir_info->g_name_max_len - file->g_name_len + 2;
-	if (S_ISCHR(file->mode) || S_ISBLK(file->mode))
-	{
-		buf[offset++] = ' ';
-		ft_memset(buf + offset, ' ', dir_info->major_max_len - file->major_len);
-		offset += dir_info->major_max_len - file->major_len;
-		ft_memmove(buf + offset, file->major, file->major_len);
-		offset += file->major_len;
-		buf[offset++] = ',';
-		buf[offset++] = ' ';
-		ft_memset(buf + offset, ' ', dir_info->minor_max_len - file->minor_len);
-		offset += dir_info->minor_max_len - file->minor_len;
-		ft_memmove(buf + offset, file->minor, file->minor_len);
-		offset += file->minor_len;
-		buf[offset++] = ' ';
-	}
-	else
-	{
-		ft_memset(buf + offset, ' ', dir_info->size_max_len - file->size_len);
-		offset += dir_info->size_max_len - file->size_len;
-		ft_memmove(buf + offset, file->str_size, file->size_len);
-		offset += file->size_len;
-		buf[offset++] = ' ';
-	}
+	ft_char_block(file, dir_info, buf, &offset);
 	ft_memmove(buf + offset, ft_show_time(file), 12);
 	offset += 12;
 	buf[offset++] = ' ';
 	ft_memmove(buf + offset, file->name, file->file_len);
 	offset += file->file_len;
-	if (file->lnk_len)
-	{
-		ft_memmove(buf + offset, " -> ", 4);
-		offset += 4;
-		ft_memmove(buf + offset, file->lnk, file->lnk_len);
-		offset += file->lnk_len;
-	}
+	ft_lnk(file, buf, &offset);
 	buf[offset++] = '\n';
 	return (offset);
 }

@@ -6,7 +6,7 @@
 /*   By: narchiba <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 11:25:12 by narchiba          #+#    #+#             */
-/*   Updated: 2018/12/13 11:54:47 by narchiba         ###   ########.fr       */
+/*   Updated: 2018/12/25 16:43:44 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ static void	merge_arrays(t_ft_merge_info_ft_ls info, size_t left,
 		info.to_sort[left + tmp] = info.buf[tmp];
 }
 
-static void	divide_and_rull(t_ft_merge_info_ft_ls info, size_t left, size_t right)
+static void	divide_and_rull(t_ft_merge_info_ft_ls info,
+		size_t left, size_t right)
 {
 	size_t	middle;
 
@@ -52,7 +53,8 @@ static void	divide_and_rull(t_ft_merge_info_ft_ls info, size_t left, size_t righ
 	}
 }
 
-int			ft_merge_sort_ft_ls(size_t *to_sort, size_t left, size_t right, int (*cmp)(void *data1, void *data2))
+int			ft_m_sort(size_t *to_sort, size_t left, size_t right,
+		int (*cmp)(void *data1, void *data2))
 {
 	t_ft_merge_info_ft_ls info;
 

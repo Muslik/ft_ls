@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 17:47:31 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/25 16:17:41 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 17:31:22 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,12 @@ void				ft_rec_dirs(t_dir_info *dir_info, size_t **vector);
  ** FLAGS PARSER
 */
 
+void				ft_print_dir(char *path, size_t check);
+char				ft_get_file_type(int mode);
+char				ft_get_file_acl(char *path);
+char				*ft_show_time(t_file_info *file);
+
+void				ft_free_vec_of_files(t_dir_info *dir_info, size_t *vector);
 int					ft_get_flags(int argc, char **argv);
 int					ft_usage_error(char c);
 int					ft_errno_error(char *path, char *name);
@@ -150,7 +156,7 @@ void				ft_ls_sort(size_t *vector, t_dir_info *dir_info);
 void				ft_print_files(size_t *vector, t_dir_info *dir_info);
 void				ft_print_in_terminal(size_t *vec_files,
 										t_dir_info *dir_info);
-int					ft_merge_sort_ft_ls(size_t *to_sort, size_t left,
+int					ft_m_sort(size_t *to_sort, size_t left,
 						size_t right, int (*cmp)(void *data1, void *data2));
 t_file_info			*ft_add_file(char *path, struct dirent	*pdirent);
 #endif

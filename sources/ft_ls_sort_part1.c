@@ -6,7 +6,7 @@
 /*   By: narchiba <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 16:11:25 by narchiba          #+#    #+#             */
-/*   Updated: 2018/12/25 16:20:41 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 16:42:47 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,21 +59,21 @@ void	ft_ls_sort(size_t *vector, t_dir_info *dir_info)
 	if (g_flags & LS_SS)
 	{
 		if (g_flags & LS_R)
-			ft_merge_sort_ft_ls(vector, 0 , dir_info->files_ammount - 1, &rev_cmp_size);
+			ft_m_sort(vector, 0, dir_info->files_ammount - 1, &rev_cmp_size);
 		else
-			ft_merge_sort_ft_ls(vector, 0 , dir_info->files_ammount - 1, &cmp_size);
+			ft_m_sort(vector, 0, dir_info->files_ammount - 1, &cmp_size);
 		return ;
 	}
 	if (g_flags & LS_T)
 	{
 		if (g_flags & LS_R)
-			ft_merge_sort_ft_ls(vector, 0 , dir_info->files_ammount - 1, &rev_cmp_time);
+			ft_m_sort(vector, 0, dir_info->files_ammount - 1, &rev_cmp_time);
 		else
-			ft_merge_sort_ft_ls(vector, 0 , dir_info->files_ammount - 1, &cmp_time);
+			ft_m_sort(vector, 0, dir_info->files_ammount - 1, &cmp_time);
 		return ;
 	}
 	if (g_flags & LS_R)
-		ft_merge_sort_ft_ls(vector, 0 , dir_info->files_ammount - 1, &rev_cmp_alpha);
+		ft_m_sort(vector, 0, dir_info->files_ammount - 1, &rev_cmp_alpha);
 	else
-		ft_merge_sort_ft_ls(vector, 0 , dir_info->files_ammount - 1, &cmp_alpha);
+		ft_m_sort(vector, 0, dir_info->files_ammount - 1, &cmp_alpha);
 }
