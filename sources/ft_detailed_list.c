@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 11:10:01 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/25 17:40:08 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 21:20:55 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,26 @@ static void	ft_fill_permissions(char *rights, int mode, char *path)
 	if (mode & S_ISVTX)
 		rights[9] = ('x' == rights[9] ? 't' : 'T');
 }
+
 static void	ft_char_block(t_file_info *file, t_dir_info *dir_info, char *buf,
 							size_t *offset)
 {
 	if (S_ISCHR(file->mode) || S_ISBLK(file->mode))
 	{
-		buf[*offset++] = ' ';
-		ft_memset(buf + *offset, ' ', dir_info->major_max_len - file->major_len);
+		buf[(*offset)++] = ' ';
+		ft_memset(buf + *offset, ' ', dir_info->major_max_len -
+				file->major_len);
 		*offset += dir_info->major_max_len - file->major_len;
 		ft_memmove(buf + *offset, file->major, file->major_len);
 		*offset += file->major_len;
-		buf[*offset++] = ',';
-		buf[*offset++] = ' ';
-		ft_memset(buf + *offset, ' ', dir_info->minor_max_len - file->minor_len);
+		buf[(*offset)++] = ',';
+		buf[(*offset)++] = ' ';
+		ft_memset(buf + *offset, ' ', dir_info->minor_max_len -
+				file->minor_len);
 		*offset += dir_info->minor_max_len - file->minor_len;
 		ft_memmove(buf + *offset, file->minor, file->minor_len);
 		*offset += file->minor_len;
-		buf[*offset++] = ' ';
+		buf[(*offset)++] = ' ';
 	}
 	else
 	{
@@ -57,7 +60,7 @@ static void	ft_char_block(t_file_info *file, t_dir_info *dir_info, char *buf,
 		*offset += dir_info->size_max_len - file->size_len;
 		ft_memmove(buf + *offset, file->str_size, file->size_len);
 		*offset += file->size_len;
-		buf[*offset++] = ' ';
+		buf[(*offset)++] = ' ';
 	}
 }
 
@@ -73,30 +76,30 @@ static void	ft_lnk(t_file_info *file, char *buf, size_t *offset)
 }
 
 int			ft_display_list(t_file_info *file, t_dir_info *dir_info, char *buf,
-		size_t offset)
+		size_t shft)
 {
-	ft_fill_permissions(buf + offset, file->mode, file->rel_path);
-	offset += 12;
-	ft_memset(buf + offset, ' ', dir_info->links_max_len - file->nlink_len);
-	offset += dir_info->links_max_len - file->nlink_len;
-	ft_memmove(buf + offset, file->st_nlink, file->nlink_len);
-	offset += file->nlink_len;
-	buf[offset++] = ' ';
-	ft_memmove(buf + offset, file->u_name, file->u_name_len);
-	offset += file->u_name_len;
-	ft_memset(buf + offset, ' ', dir_info->u_name_max_len - file->u_name_len + 2);
-	offset += dir_info->u_name_max_len - file->u_name_len + 2;
-	ft_memmove(buf + offset, file->g_name, file->g_name_len);
-	offset += file->g_name_len;
-	ft_memset(buf + offset, ' ', dir_info->g_name_max_len - file->g_name_len + 2);
-	offset += dir_info->g_name_max_len - file->g_name_len + 2;
-	ft_char_block(file, dir_info, buf, &offset);
-	ft_memmove(buf + offset, ft_show_time(file), 12);
-	offset += 12;
-	buf[offset++] = ' ';
-	ft_memmove(buf + offset, file->name, file->file_len);
-	offset += file->file_len;
-	ft_lnk(file, buf, &offset);
-	buf[offset++] = '\n';
-	return (offset);
+	ft_fill_permissions(buf + shft, file->mode, file->rel_path);
+	shft += 12;
+	ft_memset(buf + shft, ' ', dir_info->links_max_len - file->nlink_len);
+	shft += dir_info->links_max_len - file->nlink_len;
+	ft_memmove(buf + shft, file->st_nlink, file->nlink_len);
+	shft += file->nlink_len;
+	buf[shft++] = ' ';
+	ft_memmove(buf + shft, file->u_name, file->u_name_len);
+	shft += file->u_name_len;
+	ft_memset(buf + shft, ' ', dir_info->u_name_max_len - file->u_name_len + 2);
+	shft += dir_info->u_name_max_len - file->u_name_len + 2;
+	ft_memmove(buf + shft, file->g_name, file->g_name_len);
+	shft += file->g_name_len;
+	ft_memset(buf + shft, ' ', dir_info->g_name_max_len - file->g_name_len + 2);
+	shft += dir_info->g_name_max_len - file->g_name_len + 2;
+	ft_char_block(file, dir_info, buf, &shft);
+	ft_memmove(buf + shft, ft_show_time(file), 12);
+	shft += 12;
+	buf[shft++] = ' ';
+	ft_memmove(buf + shft, file->name, file->file_len);
+	shft += file->file_len;
+	ft_lnk(file, buf, &shft);
+	buf[shft++] = '\n';
+	return (shft);
 }

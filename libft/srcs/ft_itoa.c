@@ -6,14 +6,14 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 21:36:40 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/25 11:46:36 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 21:14:55 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "libft.h"
 
-static void	ft_itoaneg(int *n, int *is_neg)
+static void	ft_itoaneg(long long int *n, long long int *is_neg)
 {
 	if (*n < 0)
 	{
@@ -22,15 +22,13 @@ static void	ft_itoaneg(int *n, int *is_neg)
 	}
 }
 
-char		*ft_itoa(int n)
+char		*ft_itoa(long long int n)
 {
-	int		len;
-	int		is_neg;
-	int		ntmp;
+	long long int	len;
+	long long int	is_neg;
+	long long int	ntmp;
 	char	*str;
 
-	if (n == -2147483648)
-		return (ft_strdup("-2147483648"));
 	len = 2;
 	ntmp = n;
 	is_neg = 0;

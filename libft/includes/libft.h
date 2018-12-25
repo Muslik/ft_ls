@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 17:28:05 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/24 17:28:32 by narchiba         ###   ########.fr       */
+/*   Updated: 2018/12/25 21:15:45 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ char			*ft_strsub(char const *s, unsigned int start, size_t len);
 char			*ft_strjoin(char const *s1, char const *s2, int free_opt);
 char			*ft_strtrim(char const *s);
 char			**ft_strsplit(char const *s, char c);
-char			*ft_itoa(int n);
+char			*ft_itoa(long long int n);
 void			ft_putchar(char c);
 void			ft_putstr(char const *str);
 void			ft_putendl(char const *str);
@@ -92,7 +92,7 @@ void			ft_putnbr_fd(int c, int fd);
 t_list			*ft_lstnew(void const *content, size_t content_size);
 void			ft_lstdelone(t_list **alst, void (*del)(void *, size_t t));
 void			ft_lstdel(t_list **alst, void (*del)(void*, size_t));
-void			ft_lstadd(t_list **alst, t_list *new);
+void			ft_lstadd(t_list **alst, t_list *new_lst);
 void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list			*ft_lstmap(t_list *lst, t_list *(*f) (t_list *elem));
 

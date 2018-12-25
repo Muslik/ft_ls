@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 17:47:31 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/25 17:31:22 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 21:06:27 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ int					ft_display_list(t_file_info *file, t_dir_info *dir_info,
 void				ft_print_files(size_t *vector, t_dir_info *dir_info);
 int					cmp_alpha(void *data1, void *data2);
 int					rev_cmp_alpha(void *data1, void *data2);
-void				ft_ls_sort(size_t *vector, t_dir_info *dir_info);
+void				ft_ls_sort(size_t *vector, size_t len);
 void				ft_print_files(size_t *vector, t_dir_info *dir_info);
 void				ft_print_in_terminal(size_t *vec_files,
 										t_dir_info *dir_info);

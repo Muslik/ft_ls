@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:31:17 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/25 17:27:33 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 21:05:57 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	ft_rec_dirs(t_dir_info *dir_info, size_t **vector)
 	i = -1;
 	ft_vector_to_array((void **)vector);
 	if (dir_info->files_ammount > 1)
-		ft_ls_sort(*vector, dir_info);
+		ft_ls_sort(*vector, dir_info->files_ammount);
 	if (dir_info->files_ammount > 0)
 		ft_print_files(*vector, dir_info);
 	if (g_flags & LS_RR)

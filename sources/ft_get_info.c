@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/25 17:23:33 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/25 17:43:04 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 21:08:21 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	ft_get_file_acl(char *path)
 	return (sym);
 }
 
-char *ft_show_time(t_file_info *file)
+char	*ft_show_time(t_file_info *file)
 {
 	char		*file_time;
 
