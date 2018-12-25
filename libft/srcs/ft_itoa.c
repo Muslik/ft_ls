@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 21:36:40 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/25 21:14:55 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 23:38:01 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char		*ft_itoa(long long int n)
 	long long int	len;
 	long long int	is_neg;
 	long long int	ntmp;
-	char	*str;
+	char			*str;
 
 	len = 2;
 	ntmp = n;
