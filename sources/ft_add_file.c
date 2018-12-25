@@ -18,14 +18,14 @@ static void			fill_file_long(struct stat *stat, t_file_info *file)
 	file->st_size = stat->st_size;
 	file->u_name_len = ft_strlen(getpwuid(stat->st_uid)->pw_name);
 	file->g_name_len = ft_strlen(getgrgid(stat->st_gid)->gr_name);
-	file->str_size = ft_itoa_base(stat->st_size, 10, 0);
+	file->str_size = ft_itoa(stat->st_size);
 	file->u_name = malloc(file->u_name_len);
 	file->g_name = malloc(file->g_name_len);
 	ft_memmove(file->u_name, getpwuid(stat->st_uid)->pw_name, file->u_name_len);
 	ft_memmove(file->g_name, getgrgid(stat->st_gid)->gr_name, file->g_name_len);
-	file->minor = ft_itoa_base(minor(stat->st_rdev),10,0);
-	file->major = ft_itoa_base(major(stat->st_rdev),10,0);
-	file->st_nlink = ft_itoa_base(stat->st_nlink,10,0);
+	file->minor = ft_itoa(minor(stat->st_rdev));
+	file->major = ft_itoa(major(stat->st_rdev));
+	file->st_nlink = ft_itoa(stat->st_nlink);
 	file->st_blocks = stat->st_blocks;
 	file->ftime = stat->st_mtimespec.tv_sec;
 	file->ftime = (flags & LS_U) ? stat->st_atimespec.tv_sec : file->ftime;
@@ -76,6 +76,7 @@ t_file_info	*ft_add_file(char *path, struct dirent	*pDirent)
 	{
 		if (!(stat = (struct stat *)malloc(sizeof(struct stat))))
 			exit(EXIT_FAILURE);
+		ft_memset(stat, 0, sizeof(struct stat));
 		lstat(file->rel_path, stat);
 		fill_file(stat, file);
 		free(stat);

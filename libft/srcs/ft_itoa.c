@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 21:36:40 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/11/24 17:24:43 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 11:46:36 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ char		*ft_itoa(int n)
 	len += is_neg;
 	if ((str = (char *)malloc(sizeof(char) * len)) == NULL)
 		return (NULL);
+	ft_memset(str, 0, len);
 	str[--len] = '\0';
 	while (len--)
 	{

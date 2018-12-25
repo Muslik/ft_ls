@@ -68,7 +68,8 @@ void	ft_print_files(size_t *vector, t_dir_info *dir_info)
 {
 	if (flags & LS_L)
 	{
-		ft_print_long(vector, dir_info);
+		/* ft_print_long(vector, dir_info); */
+		return ;
 	}
 	else
 	{
