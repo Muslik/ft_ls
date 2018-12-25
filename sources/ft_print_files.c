@@ -6,7 +6,7 @@
 /*   By: narchiba <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 16:23:17 by narchiba          #+#    #+#             */
-/*   Updated: 2018/12/25 15:56:51 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 16:20:55 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	ft_print_long(size_t *vector, t_dir_info *dir_info)
 
 void	ft_print_files(size_t *vector, t_dir_info *dir_info)
 {
-	if (flags & LS_L)
+	if (g_flags & LS_L)
 	{
 		ft_print_long(vector, dir_info);
 	}

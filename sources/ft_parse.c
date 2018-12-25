@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/14 13:39:24 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/21 15:37:30 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 16:18:13 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ static int	ft_add_flags(char *str)
 		if ((bit = ft_strchr_by_index("RSUacflrtu1", *str)) == -1)
 			ft_usage_error(*str);
 		if ((*str == 'l') || (*str == '1'))
-			flags &= ~(LS_ONE | LS_L);
+			g_flags &= ~(LS_ONE | LS_L);
 		if ((*str == 'u') || (*str == 'U') || (*str == 'c'))
-			flags &= ~LS_U & ~LS_C & ~LS_UU;
-		flags |= (1 << bit);
+			g_flags &= ~LS_U & ~LS_C & ~LS_UU;
+		g_flags |= (1 << bit);
 	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: narchiba <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 15:59:25 by narchiba          #+#    #+#             */
-/*   Updated: 2018/12/25 16:05:56 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 16:20:11 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ static void			fill_file_long(struct stat *stat, t_file_info *file)
 	file->st_nlink = ft_itoa(stat->st_nlink);
 	file->st_blocks = stat->st_blocks;
 	file->ftime = stat->st_mtimespec.tv_sec;
-	file->ftime = (flags & LS_U) ? stat->st_atimespec.tv_sec : file->ftime;
-	file->ftime = (flags & LS_UU) ? stat->st_birthtimespec.tv_sec : file->ftime;
-	file->ftime = (flags & LS_C) ? stat->st_ctimespec.tv_sec : file->ftime;
+	file->ftime = (g_flags & LS_U) ? stat->st_atimespec.tv_sec : file->ftime;
+	file->ftime = (g_flags & LS_UU) ? stat->st_birthtimespec.tv_sec : file->ftime;
+	file->ftime = (g_flags & LS_C) ? stat->st_ctimespec.tv_sec : file->ftime;
 	file->size_len = ft_strlen(file->str_size);
 	file->nlink_len = ft_strlen(file->st_nlink);
 	file->minor_len = ft_strlen(file->minor);
@@ -47,20 +47,20 @@ static void			fill_file_long(struct stat *stat, t_file_info *file)
 
 static void			fill_file(struct stat *stat, t_file_info *file)
 {
-	if (flags & LS_L)
+	if (g_flags & LS_L)
 	{
 		fill_file_long(stat, file);
 	}
-	else if (flags & LS_SS)
+	else if (g_flags & LS_SS)
 	{
 		file->st_size = stat->st_size;
 	}
-	else if (flags & (LS_U | LS_UU | LS_C | LS_T))
+	else if (g_flags & (LS_U | LS_UU | LS_C | LS_T))
 	{
 		file->ftime = stat->st_mtimespec.tv_sec;
-		file->ftime = (flags & LS_U) ? stat->st_atimespec.tv_sec : file->ftime;
-		file->ftime = (flags & LS_UU) ? stat->st_birthtimespec.tv_sec : file->ftime;
-		file->ftime = (flags & LS_C) ? stat->st_ctimespec.tv_sec : file->ftime;
+		file->ftime = (g_flags & LS_U) ? stat->st_atimespec.tv_sec : file->ftime;
+		file->ftime = (g_flags & LS_UU) ? stat->st_birthtimespec.tv_sec : file->ftime;
+		file->ftime = (g_flags & LS_C) ? stat->st_ctimespec.tv_sec : file->ftime;
 	}
 }
 
@@ -82,7 +82,7 @@ t_file_info	*ft_add_file(char *path, struct dirent	*pDirent)
 	file->type = pDirent->d_type;
 	file->file_len = ft_strlen(file->name);
 	realpath(file->name, file->full_path);
-	if (flags & (LS_T | LS_UU | LS_U | LS_SS | LS_C | LS_L))
+	if (g_flags & (LS_T | LS_UU | LS_U | LS_SS | LS_C | LS_L))
 	{
 		if (!(stat = (struct stat *)malloc(sizeof(struct stat))))
 			exit(EXIT_FAILURE);

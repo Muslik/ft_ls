@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/10 19:53:18 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/24 12:16:25 by narchiba         ###   ########.fr       */
+/*   Updated: 2018/12/25 16:17:37 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 {
 	int		i;
 
-	flags = 0;
+	g_flags = 0;
 	i = ft_get_flags(argc, argv);
 	find_term_col_ammount();
 	ft_print_dir_name(i, argc, argv);

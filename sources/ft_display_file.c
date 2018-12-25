@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:31:17 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/25 15:31:49 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 16:18:45 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ void	ft_rec_dirs(t_dir_info *dir_info, size_t **vector)
 		ft_ls_sort(*vector, dir_info);
 	if (dir_info->files_ammount > 0)
 		ft_print_files(*vector, dir_info);
-	if (flags & LS_RR)
+	if (g_flags & LS_RR)
 	{
 		while (++i < dir_info->files_ammount)
 		{
 			tmp = (t_file_info *)(*vector)[i];
-			if (flags & LS_A)
+			if (g_flags & LS_A)
 			{
 				if (tmp->name[0] == '.' && tmp->name[1] == '\0')
 					continue;
@@ -140,7 +140,7 @@ int		ft_open_dirs(char *path, char *name, size_t check)
 	ft_init_dir_info(&dir_info);
 	while ((pDirent = readdir(dir)) != NULL)
 	{
-		if (pDirent->d_name[0] != '.' || (flags & LS_A))
+		if (pDirent->d_name[0] != '.' || (g_flags & LS_A))
 		{
 			tmp = ft_add_file(path, pDirent);
 			if (!(ft_vector_push_back((void **)&vector, &tmp)))
