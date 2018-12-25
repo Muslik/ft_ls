@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 17:47:31 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/25 15:25:16 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 16:05:15 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,19 +68,19 @@ size_t			g_term_col;
 
 typedef	struct	s_dir_info
 {
-	size_t	file_max_len;
-	size_t	term_rows;
-	size_t	files_ammount;
-	size_t	links_max_len;
-	size_t	u_name_max_len;
-	size_t	g_name_max_len;
-	size_t	size_max_len;
-	size_t	minor_max_len;
-	size_t	major_max_len;
-	size_t	lnk_max_len;
-	size_t	total;
-	size_t	lnk_ammount;
-}				t_dir_info;
+	size_t			file_max_len;
+	size_t			term_rows;
+	size_t			files_ammount;
+	size_t			links_max_len;
+	size_t			u_name_max_len;
+	size_t			g_name_max_len;
+	size_t			size_max_len;
+	size_t			minor_max_len;
+	size_t			major_max_len;
+	size_t			lnk_max_len;
+	size_t			total;
+	size_t			lnk_ammount;
+}					t_dir_info;
 
 /*
  ** blkcnt_t     - block size
@@ -94,33 +94,33 @@ typedef	struct	s_dir_info
  ** char *name   - file name
  */
 
-typedef struct	s_file_info
+typedef struct		s_file_info
 {
-	blkcnt_t			st_blocks;
-	mode_t				mode;
-	char				lnk[PATH_MAX + 1];
-	char				*st_nlink;
-	char				*minor;
-	char				*major;
-	char				*u_name;
-	char				*g_name;
-	off_t				st_size;
-	char				*str_size;
-	time_t				ftime;
-	unsigned char		type;
-	char				*name;
-	char				full_path[PATH_MAX];
-	char				*rel_path;
-	char				f_color[9];
-	size_t				lnk_len;
-	size_t				file_len;
-	size_t				size_len;
-	size_t				nlink_len;
-	size_t				u_name_len;
-	size_t				g_name_len;
-	size_t				minor_len;
-	size_t				major_len;
-}				t_file_info;
+	blkcnt_t		st_blocks;
+	mode_t			mode;
+	char			lnk[PATH_MAX + 1];
+	char			*st_nlink;
+	char			*minor;
+	char			*major;
+	char			*u_name;
+	char			*g_name;
+	off_t			st_size;
+	char			*str_size;
+	time_t			ftime;
+	unsigned char	type;
+	char			*name;
+	char			full_path[PATH_MAX];
+	char			*rel_path;
+	char			f_color[9];
+	size_t			lnk_len;
+	size_t			file_len;
+	size_t			size_len;
+	size_t			nlink_len;
+	size_t			u_name_len;
+	size_t			g_name_len;
+	size_t			minor_len;
+	size_t			major_len;
+}					t_file_info;
 
 #define ANSI_COLOR_BLACK     "\x1b[31m"
 #define ANSI_COLOR_RED     "\x1b[31m"
@@ -135,38 +135,39 @@ typedef struct	s_file_info
  ** VECTORS
 */
 
-int		ft_vector_to_array(void **ft_vector);
-void	*ft_vector_create(size_t elem_byte_size);
-int		ft_vector_push_back(void **ft_vector, const void *data);
-void	ft_vector_free(void **ft_vector);
+int			ft_vector_to_array(void **ft_vector);
+void		*ft_vector_create(size_t elem_byte_size);
+int			ft_vector_push_back(void **ft_vector, const void *data);
+void		ft_vector_free(void **ft_vector);
 long double	ft_ceill(long double x);
 long double	ft_floorl(long double x);
-void	*ft_vector_get_elem_n(void *ft_vector, size_t nbr);
-void	*ft_vector_get_last_elem(void *ft_vector);
-void	*ft_vector_get_first_elem(void *ft_vector);
-size_t	ft_vector_get_len(void *ft_vector);
+void		*ft_vector_get_elem_n(void *ft_vector, size_t nbr);
+void		*ft_vector_get_last_elem(void *ft_vector);
+void		*ft_vector_get_first_elem(void *ft_vector);
+size_t		ft_vector_get_len(void *ft_vector);
 
-int		ft_open_dirs(char *path, char *name, size_t check);
-void	ft_rec_dirs(t_dir_info *dir_info, size_t **vector);
+int			ft_open_dirs(char *path, char *name, size_t check);
+void		ft_rec_dirs(t_dir_info *dir_info, size_t **vector);
 
 /*
  ** FLAGS PARSER
 */
 
-int		ft_get_flags(int argc, char **argv);
-int		ft_usage_error(char c);
-int		ft_errno_error(char *path, char *name);
+int			ft_get_flags(int argc, char **argv);
+int			ft_usage_error(char c);
+int			ft_errno_error(char *path, char *name);
 
 /*
  **
 */
-int		ft_display_list(t_file_info *file, t_dir_info *dir_info, char *buf, size_t offset);
-void	ft_print_files(size_t *vector, t_dir_info *dir_info);
-int		cmp_alpha(void *data1, void *data2);
-int		rev_cmp_alpha(void *data1, void *data2);
-void	ft_ls_sort(size_t *vector, t_dir_info *dir_info);
-void	ft_print_files(size_t *vector, t_dir_info *dir_info);
-void	ft_print_in_terminal(size_t *vec_files, t_dir_info *dir_info);
-int		ft_merge_sort_ft_ls(size_t *to_sort, size_t left, size_t right, int (*cmp)(void *data1, void *data2));
+
+int			ft_display_list(t_file_info *file, t_dir_info *dir_info, char *buf, size_t offset);
+void		ft_print_files(size_t *vector, t_dir_info *dir_info);
+int			cmp_alpha(void *data1, void *data2);
+int			rev_cmp_alpha(void *data1, void *data2);
+void		ft_ls_sort(size_t *vector, t_dir_info *dir_info);
+void		ft_print_files(size_t *vector, t_dir_info *dir_info);
+void		ft_print_in_terminal(size_t *vec_files, t_dir_info *dir_info);
+int			ft_merge_sort_ft_ls(size_t *to_sort, size_t left, size_t right, int (*cmp)(void *data1, void *data2));
 t_file_info	*ft_add_file(char *path, struct dirent	*pDirent);
 #endif

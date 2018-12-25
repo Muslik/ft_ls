@@ -6,7 +6,7 @@
 /*   By: narchiba <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 15:59:25 by narchiba          #+#    #+#             */
-/*   Updated: 2018/12/25 15:56:43 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/25 16:05:56 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ t_file_info	*ft_add_file(char *path, struct dirent	*pDirent)
 	{
 		if (!(stat = (struct stat *)malloc(sizeof(struct stat))))
 			exit(EXIT_FAILURE);
-		lstat(file->rel_path, stat);
 		ft_memset(stat, 0 , sizeof(struct stat));
+		lstat(file->rel_path, stat);
 		fill_file(stat, file);
 		free(stat);
 	}
