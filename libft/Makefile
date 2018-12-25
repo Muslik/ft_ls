@@ -6,7 +6,7 @@
 #    By: dmorgil  <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/03 16:20:46 by dmorgil           #+#    #+#              #
-#    Updated: 2018/12/24 17:30:28 by narchiba         ###   ########.fr        #
+#    Updated: 2018/12/25 22:30:29 by dmorgil          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME=libft.a
@@ -26,9 +26,8 @@ RAW_SRC=ft_memchr.c ft_memccpy.c ft_memmove.c ft_memcpy.c \
 	 ft_lstdelone.c ft_lstdel.c ft_lstadd.c ft_lstiter.c ft_lstmap.c \
 	 ft_isblank.c ft_islower.c ft_isspace.c ft_isupper.c ft_isxdigit.c \
 	 ft_isgraph.c ft_strisnumeric.c ft_strislowercase.c ft_strisalpha.c \
-	 ft_iscntrl.c ft_strisprintable.c ft_strlowcase.c ft_strupcase.c ft_strlen.c\
-	 ft_itoa_base.c\
-RAW_ASS=ft_memset.s
+	 ft_iscntrl.c ft_strisprintable.c ft_strlowcase.c ft_strupcase.c \
+	 ft_itoa_base.c ft_strlen.c ft_memset.c\
 # RAW_OBJS=$(RAW_SRC:.c=.o)
 RAW_OBJS=ft_memchr.o ft_memccpy.o ft_memmove.o ft_memcpy.o \
 	 ft_memcmp.o ft_strlen.o ft_strdup.o ft_strcpy.o ft_strncpy.o ft_strcat.o \
@@ -51,7 +50,7 @@ OBJS=$(addprefix $(OBJ_DIR)/,$(RAW_OBJS))
 OBJS_CLEAN = $(strip $(foreach f,$(OBJS),$(wildcard $(f))))
 NAME_CLEAN = $(strip $(foreach f,$(NAME),$(wildcard $(f))))
 INCLUDES= -I includes
-FLAGS=-Wall -Wextra -Werror -o3 -ofast
+FLAGS=-Wall -Wextra -Werror -O3 -Ofast
 
 .PHONY: all clean fclean re
 
@@ -69,9 +68,6 @@ $(NAME): $(OBJS)
 	@ranlib $(NAME)
 
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c $(HEADER)
-	@$(CC) $(FLAGS) $(INCLUDES) -o $@ -c $<
-
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.s $(HEADER)
 	@$(CC) $(FLAGS) $(INCLUDES) -o $@ -c $<
 
 clean:

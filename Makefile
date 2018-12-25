@@ -6,7 +6,7 @@
 #    By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/10 17:38:22 by dmorgil           #+#    #+#              #
-#    Updated: 2018/12/25 17:25:24 by dmorgil          ###   ########.fr        #
+#    Updated: 2018/12/25 22:03:58 by dmorgil          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ OBJS_CLEAN  = $(strip $(foreach f,$(OBJS),$(wildcard $(f))))
 NAME_CLEAN  = $(strip $(foreach f,$(NAME),$(wildcard $(f))))
 LIB			=	libft/libft.a
 INCLUDES	:=	-I includes -I libft/includes
-FLAGS		=	-Wall -Wextra -Werror -o3 -ofast
+FLAGS		=	-Wall -Wextra -Werror -O3 -Ofast
 
 RED			=	\033[0;31m
 GREEN		=	\033[0;32m
