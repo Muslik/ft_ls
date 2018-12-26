@@ -6,7 +6,7 @@
 /*   By: narchiba <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/26 09:21:35 by narchiba          #+#    #+#             */
-/*   Updated: 2018/12/26 12:51:17 by narchiba         ###   ########.fr       */
+/*   Updated: 2018/12/26 14:15:04 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,14 @@ static t_dir_info	fill_vector(size_t i, size_t argc,
 	t_dir_info		dir_info;
 
 	ft_init_dir_info(&dir_info);
-	while (i < argc)
+	i--;
+	while (++i < argc)
 	{
-		if ((dir = opendir(argv[i])) || errno == EACCES)
+		if ((dir = opendir(argv[i])) || errno == EACCES || errno == ENOENT)
 		{
-			if (errno != EACCES)
+			if (errno == ENOENT)
+				ft_errno_error(argv[i], ft_get_name(argv[i]));
+			if (errno != EACCES && errno != ENOENT)
 				closedir(dir);
 		}
 		else
@@ -99,7 +102,6 @@ static t_dir_info	fill_vector(size_t i, size_t argc,
 				exit(EXIT_FAILURE);
 			ft_fill_dir_info(&dir_info, file);
 		}
-		i++;
 	}
 	dir_info.files_ammount = ft_vector_get_len(*vector);
 	return (dir_info);
