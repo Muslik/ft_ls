@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/14 13:39:24 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/25 17:02:26 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/26 13:06:33 by narchiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ int			ft_get_flags(int argc, char **argv)
 	int i;
 
 	i = 1;
+	if (argv[i][0] == '-' && argv[i][1] == '-' && argv[i][2] == '\0')
+		return (i + 1);
 	while (i < argc && argv[i][0] == '-' && argv[i][1] != '\0')
 	{
 		if (!ft_add_flags(argv[i]))
