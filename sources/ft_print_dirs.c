@@ -6,7 +6,7 @@
 /*   By: narchiba <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/26 09:21:35 by narchiba          #+#    #+#             */
-/*   Updated: 2018/12/26 12:45:43 by narchiba         ###   ########.fr       */
+/*   Updated: 2018/12/26 13:27:09 by narchiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ void		ft_print_dirs(size_t i, size_t argc, char **argv, size_t check)
 	size_t			*vector;
 	t_file_info		*file;
 	size_t			len;
+	size_t			j;
 
 	vector = ft_vector_create(sizeof(size_t *));
 	fill_vector(i, argc, argv, &vector);
@@ -103,14 +104,17 @@ void		ft_print_dirs(size_t i, size_t argc, char **argv, size_t check)
 	ft_vector_to_array((void **)&vector);
 	if (len > 1)
 		ft_sort_args(vector, len);
-	i = -1;
-	while (++i < len)
+	j = -1;
+	while (++j < len)
 	{
-		file = (t_file_info *)(vector[i]);
-		if (i == 0 && check == 0)
-			ft_print_dir_argv(file->rel_path, 0);
-		else
-			ft_print_dir_argv(file->rel_path, 1);
+		file = (t_file_info *)(vector[j]);
+		if (i != argc - 1)
+		{
+			if (j == 0 && check == 0)
+				ft_print_dir_argv(file->rel_path, 0);
+			else
+				ft_print_dir_argv(file->rel_path, 1);
+		}
 		ft_open_dirs(file->rel_path, file->name, 0);
 	}
 	ft_free_vec_of_files(len, vector);

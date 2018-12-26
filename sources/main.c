@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/10 19:53:18 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/26 12:27:22 by narchiba         ###   ########.fr       */
+/*   Updated: 2018/12/26 13:28:08 by narchiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,6 @@ int		main(int argc, char **argv)
 	if (i == argc)
 	{
 		ft_open_dirs(".", ".", 0);
-		return (0);
-	}
-	if (i == argc - 1)
-	{
-		ft_open_dirs(argv[i], ft_get_name(argv[i]), 0);
 		return (0);
 	}
 	ft_print_dirs(i, argc, argv, ft_print_non_dirs(i, argc, argv));
