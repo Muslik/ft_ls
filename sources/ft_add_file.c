@@ -6,7 +6,7 @@
 /*   By: narchiba <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 15:59:25 by narchiba          #+#    #+#             */
-/*   Updated: 2018/12/25 16:58:41 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/26 14:48:36 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ t_file_info			*ft_add_file(char *path, struct dirent	*pdirent)
 	file->rel_path = ft_strjoin(file->rel_path, file->name, 1);
 	file->type = pdirent->d_type;
 	file->file_len = ft_strlen(file->name);
-	realpath(file->name, file->full_path);
 	if (g_flags & (LS_T | LS_UU | LS_U | LS_SS | LS_C | LS_L))
 	{
 		if (!(stat = (struct stat *)malloc(sizeof(struct stat))))

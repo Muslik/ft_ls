@@ -6,7 +6,7 @@
 /*   By: narchiba <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/26 09:21:35 by narchiba          #+#    #+#             */
-/*   Updated: 2018/12/26 14:15:04 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/26 14:49:11 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ static t_file_info	*ft_add_non_dirs(char *path)
 	file->file_len = ft_strlen(file->name);
 	if (!(file->rel_path = ft_strdup(path)))
 		exit(EXIT_FAILURE);
-	realpath(file->name, file->full_path);
 	if (g_flags & (LS_T | LS_UU | LS_U | LS_SS | LS_C | LS_L))
 	{
 		if (!(stat = (struct stat *)malloc(sizeof(struct stat))))

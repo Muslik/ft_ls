@@ -6,7 +6,7 @@
 /*   By: narchiba <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/26 12:43:28 by narchiba          #+#    #+#             */
-/*   Updated: 2018/12/26 12:44:23 by narchiba         ###   ########.fr       */
+/*   Updated: 2018/12/26 15:12:32 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,6 @@
 # include <time.h>
 # include <pwd.h>
 # include <grp.h>
-
-# define ANSI_COLOR_BLACK   "\x1b[31m"
-# define ANSI_COLOR_RED     "\x1b[31m"
-# define ANSI_COLOR_GREEN   "\x1b[32m"
-# define ANSI_COLOR_YELLOW  "\x1b[33m"
-# define ANSI_COLOR_BLUE    "\x1b[34m"
-# define ANSI_COLOR_MAGENTA "\x1b[35m"
-# define ANSI_COLOR_CYAN    "\x1b[36"
-# define ANSI_COLOR_RESET   "\x1b[0m"
 
 # define LS_RR	1
 # define LS_SS	2
@@ -102,7 +93,6 @@ typedef struct		s_file_info
 	time_t			ftime;
 	unsigned char	type;
 	char			*name;
-	char			full_path[PATH_MAX];
 	char			*rel_path;
 	char			f_color[9];
 	size_t			lnk_len;
@@ -166,5 +156,6 @@ char				*ft_get_name(char *str);
 void				ft_init_dir_info(t_dir_info *dir_info);
 void				ft_fill_dir_info(t_dir_info *dir_info, t_file_info *tmp);
 void				ft_sort_args(size_t *vector, size_t len);
+void				find_term_col_ammount(void);
 
 #endif

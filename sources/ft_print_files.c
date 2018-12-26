@@ -6,7 +6,7 @@
 /*   By: narchiba <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 16:23:17 by narchiba          #+#    #+#             */
-/*   Updated: 2018/12/26 12:50:25 by narchiba         ###   ########.fr       */
+/*   Updated: 2018/12/26 15:15:02 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,11 @@ void		ft_print_files(size_t *vector, t_dir_info *dir_info, size_t check)
 	}
 	else
 	{
-		if (isatty(1))
+		if (isatty(1) && !(g_flags & LS_ONE))
+		{
+			find_term_col_ammount();
 			ft_print_in_terminal(vector, dir_info);
+		}
 		else
 			ft_print_in_pipe(vector, dir_info);
 	}

@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/14 13:39:24 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/26 13:06:33 by narchiba         ###   ########.fr       */
+/*   Updated: 2018/12/26 15:11:27 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,17 @@ int			ft_usage_error(char c)
 {
 	ft_putstr_fd("./ft_ls: illegal option -- ", 2);
 	ft_putchar_fd(c, 2);
-	ft_putstr_fd("\nusage: ./ft_ls [-aflRrtG1Ss] [file ...]", 2);
+	ft_putstr_fd("\nusage: ./ft_ls [-RSUacflrtu1] [file ...]", 2);
 	exit(EXIT_FAILURE);
 	return (1);
 }
 
 int			ft_errno_error(char *path, char *name)
 {
-	if (errno != 20)
+	if (errno != ENOTDIR)
 	{
 		ft_putstr_fd("./ft_ls: ", 2);
-		if (errno == 13)
+		if (errno == EACCES)
 			ft_putstr_fd(name, 2);
 		else
 			ft_putstr_fd(path, 2);

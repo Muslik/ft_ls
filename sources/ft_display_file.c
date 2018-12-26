@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:31:17 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/26 11:20:24 by narchiba         ###   ########.fr       */
+/*   Updated: 2018/12/26 14:49:02 by dmorgil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,12 @@ void	ft_fill_dir_info(t_dir_info *dir_info, t_file_info *tmp)
 		tmp->major_len : dir_info->major_max_len;
 	dir_info->lnk_max_len = dir_info->lnk_max_len < tmp->lnk_len ?
 		tmp->lnk_len : dir_info->lnk_max_len;
-	dir_info->size_max_len = dir_info->size_max_len <
-		dir_info->minor_max_len + dir_info->major_max_len + 3 ?
-		dir_info->minor_max_len + dir_info->major_max_len + 3 :
-		dir_info->size_max_len;
+	if (dir_info->size_max_len != 0 &&
+			dir_info->minor_max_len + dir_info->major_max_len != 2)
+		dir_info->size_max_len = dir_info->size_max_len <
+			dir_info->minor_max_len + dir_info->major_max_len + 3 ?
+			dir_info->minor_max_len + dir_info->major_max_len + 3 :
+			dir_info->size_max_len;
 	dir_info->total += tmp->st_blocks;
 	dir_info->lnk_ammount += (tmp->lnk_len) ? 1 : 0;
 }
