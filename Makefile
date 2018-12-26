@@ -6,7 +6,7 @@
 #    By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/12/10 17:38:22 by dmorgil           #+#    #+#              #
-#    Updated: 2018/12/25 22:03:58 by dmorgil          ###   ########.fr        #
+#    Updated: 2018/12/26 10:09:20 by narchiba         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ RAW_SRC     =	main.c \
 				ft_parse.c ft_detailed_list.c ft_display_file.c \
 				ft_print_term.c ft_add_file.c ft_ls_sort_part1.c\
 				ft_ls_sort_part2.c ft_print_files.c ft_get_info.c\
+				ft_print_dirs.c ft_print_non_dirs.c\
 
 RAW_OBJS=$(RAW_SRC:.c=.o)
 SRCS=$(addprefix $(SRC_DIR)/,$(RAW_SRC))

@@ -6,7 +6,7 @@
 /*   By: narchiba <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/24 16:23:17 by narchiba          #+#    #+#             */
-/*   Updated: 2018/12/25 17:20:43 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/26 12:50:25 by narchiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	ft_print_in_pipe(size_t *vector, t_dir_info *dir_info)
 	free(buf);
 }
 
-char static	*init_buf(t_dir_info *dir_info, size_t *offset)
+static char	*init_buf(t_dir_info *dir_info, size_t *offset, size_t check)
 {
 	size_t		sum;
 	size_t		buf_len;
@@ -52,19 +52,21 @@ char static	*init_buf(t_dir_info *dir_info, size_t *offset)
 	sum = (dir_info->size_max_len > (sum)) ? dir_info->size_max_len : sum;
 	buf_len = dir_info->file_max_len + dir_info->links_max_len +
 		dir_info->u_name_max_len + dir_info->g_name_max_len + sum + 32;
-	if (!(buf = (char *)malloc(buf_len * dir_info->files_ammount +
-					dir_info->lnk_ammount * (dir_info->lnk_max_len + 4)
-					+ 7 + len_total)))
+	if (!(buf = (char *)malloc(buf_len * dir_info->files_ammount + 7 + len_total
+					+ dir_info->lnk_ammount * (dir_info->lnk_max_len + 4))))
 		exit(EXIT_FAILURE);
-	ft_memmove(buf, "total ", 6);
-	ft_memmove(buf + 6, total, len_total);
-	*offset = 6 + len_total;
-	buf[(*offset)++] = '\n';
+	if (check)
+	{
+		ft_memmove(buf, "total ", 6);
+		ft_memmove(buf + 6, total, len_total);
+		*offset = 6 + len_total;
+		buf[(*offset)++] = '\n';
+	}
 	free(total);
 	return (buf);
 }
 
-void		ft_print_long(size_t *vector, t_dir_info *dir_info)
+static void	ft_print_long(size_t *vector, t_dir_info *dir_info, size_t check)
 {
 	t_file_info *tmp;
 	size_t		i;
@@ -72,7 +74,7 @@ void		ft_print_long(size_t *vector, t_dir_info *dir_info)
 	size_t		offset;
 
 	offset = 0;
-	buf = init_buf(dir_info, &offset);
+	buf = init_buf(dir_info, &offset, check);
 	i = -1;
 	while (++i < dir_info->files_ammount)
 	{
@@ -83,11 +85,11 @@ void		ft_print_long(size_t *vector, t_dir_info *dir_info)
 	free(buf);
 }
 
-void		ft_print_files(size_t *vector, t_dir_info *dir_info)
+void		ft_print_files(size_t *vector, t_dir_info *dir_info, size_t check)
 {
 	if (g_flags & LS_L)
 	{
-		ft_print_long(vector, dir_info);
+		ft_print_long(vector, dir_info, check);
 	}
 	else
 	{

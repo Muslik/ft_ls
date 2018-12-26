@@ -6,19 +6,19 @@
 /*   By: narchiba <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/26 19:04:09 by narchiba          #+#    #+#             */
-/*   Updated: 2018/12/25 16:53:19 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/26 08:59:09 by narchiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	ft_free_vec_of_files(t_dir_info *dir_info, size_t *vector)
+void	ft_free_vec_of_files(size_t len, size_t *vector)
 {
 	size_t		i;
 	t_file_info *tmp;
 
 	i = -1;
-	while (++i < dir_info->files_ammount)
+	while (++i < len)
 	{
 		tmp = (t_file_info *)(vector)[i];
 		free(tmp->name);

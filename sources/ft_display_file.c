@@ -6,7 +6,7 @@
 /*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/18 16:31:17 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/25 21:05:57 by dmorgil          ###   ########.fr       */
+/*   Updated: 2018/12/26 11:20:24 by narchiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	ft_rec_dirs(t_dir_info *dir_info, size_t **vector)
 	if (dir_info->files_ammount > 1)
 		ft_ls_sort(*vector, dir_info->files_ammount);
 	if (dir_info->files_ammount > 0)
-		ft_print_files(*vector, dir_info);
+		ft_print_files(*vector, dir_info, 1);
 	if (g_flags & LS_RR)
 	{
 		while (++i < dir_info->files_ammount)
@@ -37,7 +37,7 @@ void	ft_rec_dirs(t_dir_info *dir_info, size_t **vector)
 			ft_open_dirs(tmp->rel_path, tmp->name, 1);
 		}
 	}
-	ft_free_vec_of_files(dir_info, *vector);
+	ft_free_vec_of_files(dir_info->files_ammount, *vector);
 }
 
 void	ft_print_dir(char *path, size_t check)
@@ -58,7 +58,7 @@ void	ft_print_dir(char *path, size_t check)
 	}
 }
 
-void	fill_dir_info(t_dir_info *dir_info, t_file_info *tmp)
+void	ft_fill_dir_info(t_dir_info *dir_info, t_file_info *tmp)
 {
 	dir_info->file_max_len = dir_info->file_max_len < tmp->file_len ?
 		tmp->file_len : dir_info->file_max_len;
@@ -119,7 +119,7 @@ int		ft_open_dirs(char *path, char *name, size_t check)
 			tmp = ft_add_file(path, pdirent);
 			if (!(ft_vector_push_back((void **)&vector, &tmp)))
 				exit(EXIT_FAILURE);
-			fill_dir_info(&dir_info, tmp);
+			ft_fill_dir_info(&dir_info, tmp);
 		}
 	}
 	dir_info.files_ammount = ft_vector_get_len(vector);

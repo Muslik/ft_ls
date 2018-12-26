@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ls.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmorgil <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: narchiba <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/12 17:47:31 by dmorgil           #+#    #+#             */
-/*   Updated: 2018/12/25 21:06:27 by dmorgil          ###   ########.fr       */
+/*   Created: 2018/12/26 12:43:28 by narchiba          #+#    #+#             */
+/*   Updated: 2018/12/26 12:44:23 by narchiba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,21 +142,29 @@ char				ft_get_file_type(int mode);
 char				ft_get_file_acl(char *path);
 char				*ft_show_time(t_file_info *file);
 
-void				ft_free_vec_of_files(t_dir_info *dir_info, size_t *vector);
+void				ft_free_vec_of_files(size_t len, size_t *vector);
 int					ft_get_flags(int argc, char **argv);
 int					ft_usage_error(char c);
 int					ft_errno_error(char *path, char *name);
 
 int					ft_display_list(t_file_info *file, t_dir_info *dir_info,
 									char *buf, size_t offset);
-void				ft_print_files(size_t *vector, t_dir_info *dir_info);
+void				ft_print_files(size_t *vector, t_dir_info *dir_info,
+		size_t check);
 int					cmp_alpha(void *data1, void *data2);
 int					rev_cmp_alpha(void *data1, void *data2);
 void				ft_ls_sort(size_t *vector, size_t len);
-void				ft_print_files(size_t *vector, t_dir_info *dir_info);
 void				ft_print_in_terminal(size_t *vec_files,
 										t_dir_info *dir_info);
 int					ft_m_sort(size_t *to_sort, size_t left,
 						size_t right, int (*cmp)(void *data1, void *data2));
 t_file_info			*ft_add_file(char *path, struct dirent	*pdirent);
+void				ft_print_dirs(size_t i, size_t argc, char **argv,
+		size_t check);
+size_t				ft_print_non_dirs(size_t i, size_t argc, char **argv);
+char				*ft_get_name(char *str);
+void				ft_init_dir_info(t_dir_info *dir_info);
+void				ft_fill_dir_info(t_dir_info *dir_info, t_file_info *tmp);
+void				ft_sort_args(size_t *vector, size_t len);
+
 #endif
